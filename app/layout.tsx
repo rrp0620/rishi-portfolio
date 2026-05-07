@@ -5,6 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rishipatel.com"),
   title: "Rishi Patel — Operator + AI builder",
   description:
     "GTM analytics by day, AI builder by night. Looking for Forward Deployed Strategist, AI Solutions, or AI Adoption roles. Remote.",
