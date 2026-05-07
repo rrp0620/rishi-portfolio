@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export function CaseStudy() {
   return (
@@ -13,10 +13,13 @@ export function CaseStudy() {
         rollout plan for a non-technical owner. Closes with what I'd do
         differently as a forward-deployed strategist for an AI vendor.
       </p>
-      <Button asChild>
-        {/* TODO: replace with your published case study URL (Notion sub-page or /case-study route) */}
-        <Link href="/case-study">Read the case study →</Link>
-      </Button>
+      {/* TODO: replace href with your published case study URL (Notion sub-page or /case-study route) */}
+      <Link
+        href="/case-study"
+        className={buttonVariants({ variant: "default" })}
+      >
+        Read the case study →
+      </Link>
     </section>
   );
 }

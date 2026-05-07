@@ -4,6 +4,7 @@ import { FeaturedProject } from "@/components/featured-project";
 import { CaseStudy } from "@/components/case-study";
 import { AuditTemplate } from "@/components/audit-template";
 import { Contact } from "@/components/contact";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <CaseStudy />
       <AuditTemplate />
       <Contact />
+      <Footer />
     </main>
   );
 }
