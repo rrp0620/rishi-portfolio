@@ -2,6 +2,7 @@ import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
 import { FeaturedProject } from "@/components/featured-project";
 import { CaseStudy } from "@/components/case-study";
+import { AuditTemplate } from "@/components/audit-template";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <About />
       <FeaturedProject />
       <CaseStudy />
+      <AuditTemplate />
     </main>
   );
 }
