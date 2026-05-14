@@ -2,6 +2,14 @@
   "name": "rishi-portfolio",
   "version": "0.1.0",
   "private": true,
+  "description": "Personal portfolio site with a live Gemini-powered AI use-case audit demo. Built with Next.js + Tailwind, deployed on Vercel.",
+  "homepage": "https://rishi-portfolio-brown.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rrp0620/rishi-portfolio.git"
+  },
+  "author": "Rishi Patel <rrp0620@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
