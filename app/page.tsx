@@ -1,21 +1,23 @@
+import { PageHeader } from "@/components/page-header";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
-import { FeaturedProject } from "@/components/featured-project";
-import { CaseStudy } from "@/components/case-study";
-import { AuditTemplate } from "@/components/audit-template";
+import { WorkSection } from "@/components/work-section";
+import { AuditDemo } from "@/components/audit-demo";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 md:py-24 space-y-20 md:space-y-28">
-      <Hero />
-      <About />
-      <FeaturedProject />
-      <CaseStudy />
-      <AuditTemplate />
-      <Contact />
-      <Footer />
-    </main>
+    <>
+      <PageHeader />
+      <main className="mx-auto max-w-5xl space-y-28 px-6 pt-16 pb-16 md:space-y-36 md:pt-20 md:pb-24">
+        <Hero />
+        <About />
+        <WorkSection />
+        <AuditDemo />
+        <Contact />
+        <Footer />
+      </main>
+    </>
   );
 }

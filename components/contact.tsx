@@ -1,41 +1,56 @@
 import Link from "next/link";
+import { SectionHeader } from "@/components/section-header";
+
+function ContactRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-x-6 gap-y-1 border-b border-border/60 py-4 md:grid-cols-[160px_1fr]">
+      <div className="label-mono text-muted-foreground">{label}</div>
+      <div className="text-base text-foreground/85">{children}</div>
+    </div>
+  );
+}
 
 export function Contact() {
   return (
-    <section className="space-y-4">
-      <h2 className="text-2xl font-semibold tracking-tight">Contact</h2>
-      <ul className="space-y-2 text-base">
-        <li>
-          <span className="text-muted-foreground">LinkedIn: </span>
-          <Link
-            href="https://www.linkedin.com/in/rishi-r-patel/"
-            className="underline underline-offset-4 hover:text-primary"
-            target="_blank"
-            rel="noreferrer"
-          >
-            linkedin.com/in/rishi-r-patel
-          </Link>
-        </li>
-        <li>
-          <span className="text-muted-foreground">Email: </span>
+    <section className="space-y-8">
+      <SectionHeader number="04" label="Contact" meta="The quickest way in" />
+
+      <div className="space-y-1">
+        <ContactRow label="Email">
           <Link
             href="mailto:rrp0620@gmail.com"
-            className="underline underline-offset-4 hover:text-primary"
+            className="border-b border-accent transition-colors hover:bg-accent/10"
           >
             rrp0620@gmail.com
           </Link>
-        </li>
-        <li>
-          <span className="text-muted-foreground">Open to: </span>
-          Forward Deployed Strategist, AI Solutions Manager, AI Adoption Lead,
-          AI Implementation Manager, Customer Engineer (non-coding flavor),
-          Deployment Strategist
-        </li>
-        <li>
-          <span className="text-muted-foreground">Location: </span>
-          Remote (US, based in Delaware)
-        </li>
-      </ul>
+        </ContactRow>
+
+        <ContactRow label="LinkedIn">
+          <Link
+            href="https://www.linkedin.com/in/rishi-r-patel/"
+            target="_blank"
+            rel="noreferrer"
+            className="border-b border-accent transition-colors hover:bg-accent/10"
+          >
+            linkedin.com/in/rishi-r-patel
+          </Link>
+        </ContactRow>
+
+        <ContactRow label="Looking for">
+          An applied-AI role focused on getting models into real
+          workflows and helping teams adopt them.
+        </ContactRow>
+
+        <ContactRow label="Location">
+          Remote. Based in Delaware.
+        </ContactRow>
+      </div>
     </section>
   );
 }

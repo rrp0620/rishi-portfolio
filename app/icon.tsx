@@ -13,16 +13,19 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
-          color: "#ffffff",
-          fontSize: 18,
-          fontWeight: 700,
+          background: "#faf6ec",
+          color: "#1f1a14",
+          fontFamily: "Georgia, serif",
+          fontSize: 20,
+          fontWeight: 600,
           letterSpacing: -0.5,
+          border: "1.5px solid #1f1a14",
+          borderRadius: 4,
         }}
       >
         RP
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

@@ -2,19 +2,21 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t pt-8 text-sm text-muted-foreground">
-      <p>
-        Built with Next.js, Tailwind, and shadcn/ui. Code at{" "}
-        <Link
-          href="https://github.com/rrp0620/rishi-portfolio"
-          className="underline underline-offset-4 hover:text-primary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          github.com/rrp0620/rishi-portfolio
-        </Link>
-        . Most of the build was paired with Cursor and Claude Code.
-      </p>
+    <footer className="border-t border-border pt-8">
+      <div className="flex flex-col gap-3 label-mono text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 Rishi Patel · Built in Delaware</p>
+        <p>
+          Source:{" "}
+          <Link
+            href="https://github.com/rrp0620/rishi-portfolio"
+            target="_blank"
+            rel="noreferrer"
+            className="border-b border-current hover:text-foreground"
+          >
+            github.com/rrp0620/rishi-portfolio
+          </Link>
+        </p>
+      </div>
     </footer>
   );
 }
