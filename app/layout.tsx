@@ -21,9 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const TITLE = "Rishi Patel — Operator and AI builder";
+const TITLE = "Rishi Patel · Portfolio";
 const DESCRIPTION =
-  "GTM analytics by day. AI tools for small businesses by night. Open to applied-AI roles focused on getting models into real workflows and helping teams adopt them.";
+  "Analyst on the business planning team at a public company. Build AI tools on top of that role to do more in less time. Open to AI deployment roles focused on getting models into real workflows and helping teams adopt them.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rishi-portfolio-brown.vercel.app"),
@@ -43,16 +43,34 @@ export const metadata: Metadata = {
   },
 };
 
+// Inline script that applies the user's saved theme (or their system
+// preference) BEFORE React hydrates. Without this you'd see a flash of
+// the wrong theme on every page load. The matching toggle component
+// writes to localStorage so this script picks it up next time.
+const themeBootstrap = `
+  (function() {
+    try {
+      var stored = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = stored || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         {children}
       </body>
     </html>

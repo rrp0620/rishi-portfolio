@@ -1,8 +1,8 @@
 # rishi-portfolio
 
-Personal portfolio for an applied-AI job search. Live at **[rishi-portfolio-brown.vercel.app](https://rishi-portfolio-brown.vercel.app)**.
+Personal portfolio for an AI deployment job search. Live at **[rishi-portfolio-brown.vercel.app](https://rishi-portfolio-brown.vercel.app)**.
 
-The site is a small Next.js app on Vercel with five project case studies and one live AI demo. The demo (`/api/audit`) is a Gemini-powered use-case audit that takes a company name and a workflow description, runs a quick web search on the company, and returns a structured audit covering friction points, AI fit, and one specific pilot worth running. It exists so anyone visiting the site can experience the kind of work I'd do in an applied-AI role rather than just read about it.
+The site is a small Next.js app on Vercel with five project case studies and one live AI demo. The demo (`/api/audit`) is a Gemini powered use-case audit that takes a company name and a workflow description, runs a quick web search on the company, and returns a structured audit covering friction points, AI fit, and one specific pilot worth running. It exists so anyone visiting the site can experience the kind of work I'd do in an AI deployment role rather than just read about it.
 
 ## Stack
 
@@ -26,7 +26,7 @@ Free Gemini API keys are available at [aistudio.google.com/apikey](https://aistu
 
 ```
 app/                          # Next.js routes
-  api/audit/route.ts          # Gemini-backed use-case audit endpoint
+  api/audit/route.ts          # Gemini backed use-case audit endpoint
   projects/[slug]/page.tsx    # Per-project case-study pages
   page.tsx                    # Homepage (hero → about → work → audit → contact)
   layout.tsx                  # Root layout, fonts, metadata
@@ -51,7 +51,7 @@ To add a new project, edit `lib/projects.ts` (one entry per project) and drop a 
 2. Rate-limits per IP in-memory (5 requests/hour). Imperfect on serverless cold starts but adequate for a portfolio.
 3. Calls Gemini with the `google_search` tool attached. If that call fails for any reason (model issue, tool unavailable, timeout, etc.), retries without tools using strict JSON-mode output.
 4. Parses the response with a permissive normalizer that fills missing fields with empty defaults rather than rejecting partial responses.
-5. Returns a structured `AuditResult` the client renders as a card with friction list, AI-fit columns, pilot recommendation, and a flow visualization.
+5. Returns a structured `AuditResult` the client renders as a card with friction list, AI fit columns, pilot recommendation, and a flow visualization.
 
 The system prompt in `app/api/audit/route.ts` is the most interesting file in the repo. It carries about 50 voice rules (banned words, banned phrases, rule-of-three avoidance, no Bold-term-explanation lists) so the model's output blends into the rest of the site's editorial voice. Worth reading if you're curious how to keep an LLM from sounding like an LLM.
 

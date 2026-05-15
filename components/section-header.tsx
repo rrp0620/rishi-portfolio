@@ -27,11 +27,11 @@ export function SectionHeader({
     <div className={cn("space-y-3", className)}>
       <div className="flex items-end justify-between gap-4">
         <div className="flex items-baseline gap-3 label-mono text-muted-foreground">
-          <span className="text-foreground">{number}</span>
+          <span className="text-accent">{number}</span>
           <span aria-hidden className="text-muted-foreground/60">
             /
           </span>
-          <span>{label}</span>
+          <span className="text-foreground">{label}</span>
         </div>
         {meta ? (
           <span className="label-mono text-muted-foreground">{meta}</span>

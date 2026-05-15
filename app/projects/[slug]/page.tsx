@@ -23,7 +23,7 @@ export async function generateMetadata({
   const project = getProject(slug);
   if (!project) return {};
   return {
-    title: `${project.title} — ${project.label.toLowerCase()} | Rishi Patel`,
+    title: `${project.title} · ${project.label.toLowerCase()} · Rishi Patel`,
     description: project.summary,
   };
 }

@@ -42,9 +42,8 @@ export function Contact() {
           </Link>
         </ContactRow>
 
-        <ContactRow label="Looking for">
-          An applied-AI role focused on getting models into real
-          workflows and helping teams adopt them.
+        <ContactRow label="Open to">
+          Roles in AI deployment and adoption.
         </ContactRow>
 
         <ContactRow label="Location">

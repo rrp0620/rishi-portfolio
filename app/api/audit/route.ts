@@ -38,7 +38,7 @@ const RATE_LIMIT_PER_HOUR = 5;
 // Set GEMINI_AUDIT_DEBUG=0 in production to hide upstream details.
 const EXPOSE_UPSTREAM_ERRORS = process.env.GEMINI_AUDIT_DEBUG !== "0";
 
-const SYSTEM_PROMPT = `You are an AI use-case audit assistant. You write in the voice of Rishi Patel, an operator and AI builder who is interviewing for applied-AI roles. The person on the other end of this conversation is a recruiter or hiring manager trying the demo from his portfolio site. They have typed in a company name and a workflow description.
+const SYSTEM_PROMPT = `You are an AI use-case audit assistant. You write in the voice of Rishi Patel, an operator and AI builder who is interviewing for AI deployment roles. The person on the other end of this conversation is a recruiter or hiring manager trying the demo from his portfolio site. They have typed in a company name and a workflow description.
 
 VOICE. Read this carefully. It is the most important part of your job.
 
@@ -96,7 +96,7 @@ Your entire response must be ONE valid JSON object matching this exact shape. No
   "pilot": {
     "title": "<specific pilot name, 4-8 words, no marketing copy>",
     "what": "<two or three sentences describing what I'd build and ship first; reference actual data sources and the AI surface>",
-    "impact": "<one sentence with a dollar range or a time-saved range; always a range, never a point estimate>",
+    "impact": "<one sentence with a dollar range or a time saved range; always a range, never a point estimate>",
     "flow": [
       "<short step name, 2-5 words>"
     ]

@@ -113,22 +113,22 @@ export function AuditDemo() {
 
       <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-[1fr_2fr]">
         <p className="font-display text-2xl leading-[1.2] tracking-tight text-foreground md:text-[1.65rem]">
-          An AI use-case audit you can run right now.
+          An AI use case audit you can run right now.
         </p>
         <div className="space-y-4 text-base leading-relaxed text-foreground/85">
           <p>
             Below is a working demo of the kind of audit I&apos;d run on
-            day one of an applied-AI role. Type in a company name and
-            describe any workflow that eats more time than it should.
-            Gemini will run a quick search to learn what the company
-            actually does, then come back with an honest read on whether
-            AI is the right tool for the problem and one specific pilot
-            recommendation if it is.
+            day one of an AI deployment engagement. Type in a company
+            name and describe any workflow that eats more time than it
+            should. Gemini will run a quick search to learn what the
+            company actually does, then come back with an honest read on
+            whether AI is the right tool for the problem and one
+            specific pilot recommendation if it is.
           </p>
           <p>
             Built directly against the Gemini API on a serverless route
             under this domain, with Google Search grounding turned on.
-            The output you see is generated live, not pre-recorded.
+            The output you see is generated live, not pre recorded.
           </p>
         </div>
       </div>
@@ -217,7 +217,7 @@ export function AuditDemo() {
               )}
             </button>
             <span className="label-mono text-muted-foreground">
-              15-30 seconds, including the web search
+              15 to 30 seconds, including the web search
             </span>
           </div>
 
@@ -235,9 +235,9 @@ export function AuditDemo() {
       )}
 
       <p className="label-mono text-muted-foreground">
-        Rate-limited to five audits per session. If you want a deeper one,{" "}
+        Rate limited to five audits per session. If you want a deeper one,{" "}
         <a
-          href="mailto:rrp0620@gmail.com?subject=AI%20use-case%20audit"
+          href="mailto:rrp0620@gmail.com?subject=AI%20use%20case%20audit"
           className="border-b border-accent text-foreground transition-colors hover:bg-accent/10"
         >
           email me

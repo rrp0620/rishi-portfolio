@@ -112,14 +112,17 @@
  * Auto-applied via `prefers-color-scheme` in layout (no toggle needed).
  */
 .dark {
-  --background: oklch(0.165 0.013 50);
-  --foreground: oklch(0.94 0.014 80);
+  /* Darker than the previous dark mode but intentionally not pure black.
+     Stays in the warm-ink family so cream cards still feel related, and
+     keeps foreground / muted contrast well above WCAG AAA for body text. */
+  --background: oklch(0.125 0.012 50);
+  --foreground: oklch(0.95 0.014 80);
 
-  --card: oklch(0.21 0.015 50);
-  --card-foreground: oklch(0.94 0.014 80);
+  --card: oklch(0.2 0.015 50);
+  --card-foreground: oklch(0.95 0.014 80);
 
-  --popover: oklch(0.21 0.015 50);
-  --popover-foreground: oklch(0.94 0.014 80);
+  --popover: oklch(0.2 0.015 50);
+  --popover-foreground: oklch(0.95 0.014 80);
 
   --primary: oklch(0.94 0.014 80);
   --primary-foreground: oklch(0.205 0.018 50);

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Rishi Patel — Operator and AI builder";
+export const alt = "Rishi Patel · Portfolio";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -59,8 +59,9 @@ export default function OpengraphImage() {
               maxWidth: 980,
             }}
           >
-            Operator and AI builder. GTM analytics by day, AI tools for
-            small businesses by night.
+            Analyst on the business planning team at a public company.
+            Build with AI tools on top of that role to do more in less
+            time.
           </div>
         </div>
 
@@ -84,7 +85,7 @@ export default function OpengraphImage() {
               background: "#c2410c",
             }}
           />
-          <span>Open to applied-AI roles · Deployment, adoption, strategy</span>
+          <span>Open to AI deployment and adoption roles</span>
         </div>
       </div>
     ),
