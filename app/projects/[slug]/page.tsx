@@ -57,30 +57,26 @@ export default async function ProjectPage({
         {/* Breadcrumb */}
         <Link
           href="/"
-          className="label-mono text-muted-foreground transition-colors hover:text-foreground"
+          className="label text-muted-foreground transition-colors hover:text-foreground"
         >
           ← Home
         </Link>
 
         {/* Metadata ribbon */}
-        <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 label-mono text-muted-foreground">
+        <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 label text-muted-foreground">
           <span className="text-foreground">{project.label}</span>
-          <span aria-hidden className="text-muted-foreground/40">
-            ·
-          </span>
+          <span aria-hidden className="text-muted-foreground/40">·</span>
           <span>{project.year}</span>
-          <span aria-hidden className="text-muted-foreground/40">
-            ·
-          </span>
+          <span aria-hidden className="text-muted-foreground/40">·</span>
           <span>{project.readTime}</span>
         </div>
 
         {/* Hero */}
         <header className="mt-6 space-y-5 border-b border-border pb-10">
-          <h1 className="font-display text-4xl font-medium leading-[1.05] tracking-tight md:text-6xl">
-            {project.title}.
+          <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+            {project.title}
           </h1>
-          <p className="max-w-2xl font-display text-xl italic leading-snug text-muted-foreground md:text-2xl">
+          <p className="max-w-2xl text-lg leading-snug text-foreground/80 md:text-xl">
             {project.subtitle}
           </p>
 
@@ -88,7 +84,7 @@ export default async function ProjectPage({
             {project.stack.map((tool) => (
               <span
                 key={tool}
-                className="label-mono inline-flex items-center rounded-sm border border-border bg-card px-1.5 py-0.5 text-foreground/70"
+                className="inline-flex items-center rounded-sm border border-border bg-card px-2 py-0.5 text-[0.7rem] tracking-wide text-foreground/70"
               >
                 {tool}
               </span>
@@ -99,7 +95,7 @@ export default async function ProjectPage({
             <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm">
               <Link
                 href={project.liveUrl}
-                className="border-b border-accent transition-colors hover:bg-accent/10"
+                className="text-accent underline decoration-accent decoration-1 underline-offset-[4px] transition-all hover:decoration-2"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -142,7 +138,7 @@ export default async function ProjectPage({
         <div className="mt-20 border-t border-border pt-8">
           <Link
             href="/"
-            className="label-mono text-muted-foreground transition-colors hover:text-foreground"
+            className="label text-muted-foreground transition-colors hover:text-foreground"
           >
             ← Back to home
           </Link>

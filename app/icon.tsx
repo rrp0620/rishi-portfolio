@@ -13,17 +13,15 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#faf6ec",
-          color: "#1f1a14",
-          fontFamily: "Georgia, serif",
+          background: "#fafaf7",
+          color: "#1a1a1a",
+          fontFamily: "Inter, sans-serif",
           fontSize: 20,
-          fontWeight: 600,
+          fontWeight: 700,
           letterSpacing: -0.5,
-          border: "1.5px solid #1f1a14",
-          borderRadius: 4,
         }}
       >
-        RP
+        rp
       </div>
     ),
     { ...size },

@@ -6,13 +6,11 @@ What I built them is a small AI operating layer. The bottom of it is a Supabase 
 
 ## The business
 
-This is one owner operator and three part time employees running a single physical location. They've been open about three years, done somewhere around 5,000 paid bookings, and brought in lifetime revenue in the mid six figures. The lead host earns a small revenue bonus on top of the hourly rate.
+One owner-operator. Three part-time employees. One physical location, open about three years, somewhere around 5,000 paid bookings, mid-six-figures lifetime revenue. The lead host earns a small revenue bonus on top of the hourly rate.
 
-The owner's week, before any of this work, looked roughly like this. Monday morning they'd open Bookeo and try to figure out how the previous week had done, compared against a benchmark they were keeping in their head. Sometime mid week they'd decide whether to run a promo or push social, mostly on feel. At the end of every pay period they'd pivot a time sheet CSV into something usable, multiply by hourly rates, total it for the month, and hope the math was right. At month end they'd reconcile fixed expenses against revenue, mentally guess whether the month had been profitable, and find out two or three weeks later that it hadn't been.
+The owner's week before any of this work looked something like this. Monday morning they'd open Bookeo and try to figure out how the previous week had done, compared against a benchmark they were keeping in their head. Mid-week they'd decide whether to run a promo or push social, mostly on feel. Every pay period they'd pivot a time-sheet CSV into something usable, multiply by hourly rates, total it for the month, and hope the math was right. At month-end they'd reconcile fixed expenses against revenue, mentally guess whether the month had been profitable, and find out two or three weeks later that it hadn't been.
 
-This is a margin sensitive business that had been running a small persistent monthly loss. Not catastrophic, but persistent enough that the only operating question worth answering was "how do we stop losing money?" Every other decision was downstream of one underlying gap: **the owner couldn't see profitability in real time, so by the time they reacted to a bad week, the bad month was already booked.**
-
-That's the workflow this writeup is about.
+The business had been running a small persistent monthly loss. Not catastrophic, but persistent enough that the only operating question worth answering was "how do we stop losing money?" Every other decision was downstream of one underlying gap: the owner couldn't see profitability in real time, so by the time they reacted to a bad week, the bad month was already booked.
 
 ## Where it bleeds
 
@@ -34,7 +32,7 @@ The time sheet CSV was the bottleneck inside the bottleneck. Every pay period th
 
 A bad week looks like a normal week unless you can compare it to the same week last year or against a target. Without targets, every week was "fine." A 25% drop on Saturday afternoons would get noticed only when the month closed, or sometimes not at all.
 
-The unifying problem was not any single one of these. It was that the owner was trying to run a margin sensitive business **without a feedback loop that closed faster than a month.** That's the gap the system was built to close.
+The unifying problem was not any single one of these. It was that the owner was trying to run a margin-sensitive business without a feedback loop that closed faster than a month. That's the gap the system was built to close.
 
 ## The BI foundation: why I built the dashboard before the AI
 
@@ -86,9 +84,7 @@ These would have been "can you pull this for me" Slack messages going to me at 9
 
 The four frictions from earlier split cleanly across the two surfaces. Real-time profit visibility is solved primarily by the BI dashboard, with Profit Coach as the prescription layer interpreting what the dashboard surfaces. Manual labor reconciliation is solved by the BI layer alone; the AI isn't involved at all. Ad-hoc business questions are solved by Ask Anything. Anomaly detection is solved by Profit Coach, which surfaces "this slot is underperforming" the moment a run rate diverges from target.
 
-Three of the four frictions get touched by the AI. One doesn't need it. That's the correct ratio for a build like this. Not every operating problem is an AI problem, and pretending otherwise is how AI rollouts lose credibility.
-
-> BI before AI. The model only works because the data underneath it was consolidated and clean to start with. Without that step, every recommendation would have been confidently wrong about half the time.
+Three of the four frictions get touched by the AI. One doesn't need it. That ratio is the right one for a build like this. Not every operating problem is an AI problem, and pretending otherwise is how AI rollouts lose credibility.
 
 ### Two intentional non goals
 

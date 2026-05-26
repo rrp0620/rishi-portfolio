@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/page-header";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
 import { WorkSection } from "@/components/work-section";
+import { AskRishi } from "@/components/ask-rishi";
 import { AuditDemo } from "@/components/audit-demo";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
@@ -14,6 +15,7 @@ export default function Home() {
         <Hero />
         <About />
         <WorkSection />
+        <AskRishi />
         <AuditDemo />
         <Contact />
         <Footer />

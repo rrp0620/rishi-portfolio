@@ -1,35 +1,42 @@
+/**
+ * Hero. Three sentences. No hobbyist framing. Two CTAs — one to the live
+ * audit demo, one to the Ask Rishi tool. Both rendered as quiet underlined
+ * links rather than the old terra-cotta-pill, which had become the v0
+ * portfolio default.
+ */
 export function Hero() {
   return (
     <section className="space-y-8 pt-2">
       <div className="space-y-6">
-        <h1 className="font-display text-5xl font-medium leading-[1.02] tracking-tight md:text-7xl">
-          Rishi Patel<span className="text-accent">.</span>
+        <h1 className="text-5xl font-semibold leading-[1.04] tracking-tight md:text-7xl">
+          Rishi Patel
         </h1>
         <p className="max-w-2xl text-lg leading-relaxed text-foreground/85 md:text-xl">
-          I&apos;m an analyst at a public company. After work I build AI
-          tools and play with the new ones as they ship, mostly to see
-          what they can actually do.
+          I work with executives to ship AI use cases that move real
+          numbers. By day I&apos;m on the business planning team at a public
+          company, reporting to the Chief Business Officer. On the side I
+          build customer-facing AI for small businesses. Open to AI
+          deployment roles.
         </p>
       </div>
 
-      <a
-        href="#audit"
-        className="group inline-flex items-center gap-2.5 rounded-sm bg-accent px-4 py-2.5 transition-colors hover:bg-accent/90"
-      >
-        <span
-          aria-hidden
-          className="inline-block h-1.5 w-1.5 rounded-full bg-accent-foreground/80"
-        />
-        <span className="label-mono text-accent-foreground">
-          Try the live AI audit
-        </span>
-        <span
-          aria-hidden
-          className="label-mono text-accent-foreground transition-transform group-hover:translate-y-0.5"
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
+        <a
+          href="#audit"
+          className="text-base text-foreground underline decoration-accent decoration-1 underline-offset-[6px] transition-colors hover:decoration-2 hover:text-accent"
         >
-          ↓
+          Try the live audit
+        </a>
+        <span aria-hidden className="text-muted-foreground/40">
+          /
         </span>
-      </a>
+        <a
+          href="#ask"
+          className="text-base text-foreground underline decoration-accent decoration-1 underline-offset-[6px] transition-colors hover:decoration-2 hover:text-accent"
+        >
+          Ask me anything
+        </a>
+      </div>
     </section>
   );
 }

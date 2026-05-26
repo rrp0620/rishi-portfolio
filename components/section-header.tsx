@@ -1,24 +1,20 @@
 import { cn } from "@/lib/utils";
 
 type SectionHeaderProps = {
-  /** Two-digit section number — "01", "02"... */
-  number: string;
-  /** Section label — ABOUT, PROJECTS, CONTACT */
+  /** Section label — kept as a plain string. No leading "01 /" prefix anymore. */
   label: string;
-  /** Optional right-aligned metadata, in monospace. Accepts a string or
-   *  JSX so individual sections can add accent dots, colour, etc. */
+  /** Optional right-aligned metadata. Accepts a string or JSX. */
   meta?: React.ReactNode;
   className?: string;
 };
 
 /**
- * Editorial section header used as the spine of the homepage.
- *
- *   01 / ABOUT                                      AVAILABLE NOW
- *   ────────────────────────────────────────────────────────────
+ * A simple section marker. A small uppercased label on the left, optional
+ * metadata on the right, a hairline rule underneath. Replaces the previous
+ * "01 / ABOUT" numbered editorial header — that pattern had become a tell
+ * across AI-built portfolios.
  */
 export function SectionHeader({
-  number,
   label,
   meta,
   className,
@@ -26,15 +22,9 @@ export function SectionHeader({
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex items-end justify-between gap-4">
-        <div className="flex items-baseline gap-3 label-mono text-muted-foreground">
-          <span className="text-accent">{number}</span>
-          <span aria-hidden className="text-muted-foreground/60">
-            /
-          </span>
-          <span className="text-foreground">{label}</span>
-        </div>
+        <span className="label text-muted-foreground">{label}</span>
         {meta ? (
-          <span className="label-mono text-muted-foreground">{meta}</span>
+          <span className="label text-muted-foreground">{meta}</span>
         ) : null}
       </div>
       <div className="rule" />

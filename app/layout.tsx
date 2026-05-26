@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,22 +8,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  axes: ["opsz"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-});
-
 const TITLE = "Rishi Patel · Portfolio";
 const DESCRIPTION =
-  "Analyst on the business planning team at a public company. Build AI tools on top of that role to do more in less time. Open to AI deployment roles focused on getting models into real workflows and helping teams adopt them.";
+  "I work with executives to ship AI use cases that move real numbers. Senior analyst on the business planning team at a public company, reporting to the Chief Business Officer. Customer-facing AI builds for small businesses on the side. Open to AI deployment roles.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rishi-portfolio-brown.vercel.app"),
@@ -68,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} font-sans antialiased`}
       >
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         {children}

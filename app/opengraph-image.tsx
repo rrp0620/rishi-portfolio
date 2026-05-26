@@ -15,9 +15,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 96px",
-          background: "#faf6ec",
-          color: "#1f1a14",
-          fontFamily: "Georgia, serif",
+          background: "#fafaf7",
+          color: "#1a1a1a",
+          fontFamily: "Inter, sans-serif",
         }}
       >
         {/* Top metadata strip */}
@@ -25,67 +25,64 @@ export default function OpengraphImage() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            fontFamily: "monospace",
-            fontSize: 18,
+            fontSize: 16,
             letterSpacing: 2,
             textTransform: "uppercase",
-            color: "#6b6557",
+            color: "#6a6a6a",
           }}
         >
-          <span>Rishi Patel · Portfolio 2026</span>
-          <span>Remote / Delaware</span>
+          <span>Rishi Patel</span>
+          <span>Remote · US East</span>
         </div>
 
         {/* Headline */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           <div
             style={{
-              fontSize: 124,
-              fontWeight: 500,
-              letterSpacing: -2.5,
+              fontSize: 116,
+              fontWeight: 600,
+              letterSpacing: -3,
               lineHeight: 1,
-              color: "#1f1a14",
+              color: "#1a1a1a",
             }}
           >
-            Rishi Patel.
+            Rishi Patel
           </div>
           <div
             style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: 32,
+              fontSize: 30,
               fontWeight: 400,
-              color: "#3a3329",
+              color: "#3a3a3a",
               lineHeight: 1.3,
-              maxWidth: 980,
+              maxWidth: 1000,
             }}
           >
-            Analyst on the business planning team at a public company.
-            Build with AI tools on top of that role to do more in less
-            time.
+            I work with executives to ship AI use cases that move real
+            numbers. Senior analyst on the business planning team at a
+            public company, reporting to the Chief Business Officer.
           </div>
         </div>
 
-        {/* Bottom rule + accent */}
+        {/* Bottom rule + label */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: 16,
-            fontFamily: "monospace",
-            fontSize: 16,
+            fontSize: 15,
             letterSpacing: 2,
             textTransform: "uppercase",
-            color: "#6b6557",
+            color: "#6a6a6a",
           }}
         >
           <div
             style={{
               flexGrow: 1,
-              height: 2,
-              background: "#c2410c",
+              height: 1,
+              background: "#1f3a8a",
             }}
           />
-          <span>Open to AI deployment and adoption roles</span>
+          <span>Open to AI deployment roles</span>
         </div>
       </div>
     ),

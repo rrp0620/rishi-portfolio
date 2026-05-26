@@ -9,8 +9,8 @@ function ContactRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-1 gap-x-6 gap-y-1 border-b border-border/60 py-4 md:grid-cols-[160px_1fr]">
-      <div className="label-mono text-muted-foreground">{label}</div>
+    <div className="grid grid-cols-1 gap-x-6 gap-y-1 border-b border-border py-4 md:grid-cols-[160px_1fr]">
+      <div className="label text-muted-foreground">{label}</div>
       <div className="text-base text-foreground/85">{children}</div>
     </div>
   );
@@ -19,13 +19,13 @@ function ContactRow({
 export function Contact() {
   return (
     <section className="space-y-8">
-      <SectionHeader number="04" label="Contact" meta="The quickest way in" />
+      <SectionHeader label="Contact" meta="The quickest way in" />
 
       <div className="space-y-1">
         <ContactRow label="Email">
           <Link
             href="mailto:rrp0620@gmail.com"
-            className="border-b border-accent transition-colors hover:bg-accent/10"
+            className="underline decoration-accent decoration-1 underline-offset-[4px] text-accent transition-all hover:decoration-2"
           >
             rrp0620@gmail.com
           </Link>
@@ -36,18 +36,19 @@ export function Contact() {
             href="https://www.linkedin.com/in/rishi-r-patel/"
             target="_blank"
             rel="noreferrer"
-            className="border-b border-accent transition-colors hover:bg-accent/10"
+            className="underline decoration-accent decoration-1 underline-offset-[4px] text-accent transition-all hover:decoration-2"
           >
             linkedin.com/in/rishi-r-patel
           </Link>
         </ContactRow>
 
         <ContactRow label="Open to">
-          Roles in AI deployment and adoption.
+          AI Outcomes Manager, AI Solutions, Forward Deployed Strategist,
+          and AI Adoption roles at AI-native vendors. Remote, US East.
         </ContactRow>
 
         <ContactRow label="Location">
-          Remote. Based in Delaware.
+          Remote. Based in Delaware (US East Coast).
         </ContactRow>
       </div>
     </section>

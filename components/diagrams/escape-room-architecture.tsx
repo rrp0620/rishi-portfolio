@@ -16,7 +16,7 @@ export function EscapeRoomArchitecture() {
   return (
     <figure className="space-y-5 rounded-md border border-border bg-card p-6 md:p-8">
       <figcaption className="space-y-2">
-        <div className="label-mono text-muted-foreground">
+        <div className="label text-muted-foreground">
           Architecture · at a glance
         </div>
         <p className="max-w-2xl text-sm leading-relaxed text-foreground/75">
@@ -96,7 +96,7 @@ function Tier({
   return (
     <div className="grid grid-cols-1 gap-2 md:grid-cols-[100px_1fr] md:items-stretch md:gap-3">
       <div className="flex md:items-center">
-        <span className="label-mono text-muted-foreground/80">{label}</span>
+        <span className="label text-muted-foreground/80">{label}</span>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
         {children}
@@ -133,7 +133,7 @@ function Box({
 
 function BoxTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div className="font-display text-sm font-medium leading-tight tracking-tight text-foreground">
+    <div className="text-sm font-semibold leading-tight tracking-tight text-foreground">
       {children}
     </div>
   );
@@ -141,7 +141,7 @@ function BoxTitle({ children }: { children: React.ReactNode }) {
 
 function BoxSub({ children }: { children: React.ReactNode }) {
   return (
-    <div className="label-mono mt-1 text-muted-foreground">{children}</div>
+    <div className="label mt-1 text-muted-foreground">{children}</div>
   );
 }
 

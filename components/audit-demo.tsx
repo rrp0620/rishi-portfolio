@@ -96,7 +96,6 @@ export function AuditDemo() {
   return (
     <section id="audit" className="space-y-8 scroll-mt-24">
       <SectionHeader
-        number="03"
         label="Try the audit"
         meta={
           <span className="inline-flex items-center gap-1.5">
@@ -106,29 +105,28 @@ export function AuditDemo() {
             />
             <span className="text-accent">Live</span>
             <span aria-hidden className="text-muted-foreground/40">·</span>
-            <span>Powered by Gemini</span>
+            <span>Gemini + Google Search</span>
           </span>
         }
       />
 
       <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-[1fr_2fr]">
-        <p className="font-display text-2xl leading-[1.2] tracking-tight text-foreground md:text-[1.65rem]">
-          An AI use case audit you can run right now.
+        <p className="text-2xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-[1.65rem]">
+          Day-one discovery, in a box.
         </p>
         <div className="space-y-4 text-base leading-relaxed text-foreground/85">
           <p>
-            Below is a working demo of the kind of audit I&apos;d run on
-            day one of an AI deployment engagement. Type in a company
-            name and describe any workflow that eats more time than it
-            should. Gemini will run a quick search to learn what the
-            company actually does, then come back with an honest read on
-            whether AI is the right tool for the problem and one
-            specific pilot recommendation if it is.
+            Type in any company and any workflow. The model runs a quick
+            Google Search on the company first, then returns the same audit
+            I&apos;d produce in the first hour of an AI deployment
+            engagement: where the workflow bleeds time, what AI can
+            actually move, where it would be theater, and the specific
+            pilot I&apos;d ship first.
           </p>
-          <p>
-            Built directly against the Gemini API on a serverless route
-            under this domain, with Google Search grounding turned on.
-            The output you see is generated live, not pre recorded.
+          <p className="text-sm text-muted-foreground">
+            Built directly against the Gemini API on a serverless route on
+            this domain, with Google Search grounding enabled. The output
+            you see is generated live, not pre-recorded.
           </p>
         </div>
       </div>
@@ -137,12 +135,12 @@ export function AuditDemo() {
       {state.kind !== "result" && (
         <form
           onSubmit={runAudit}
-          className="space-y-6 rounded-md border border-border bg-card p-6 md:p-8"
+          className="space-y-6 rounded-sm border border-border bg-card p-6 md:p-8"
         >
           <div className="space-y-2">
             <label
               htmlFor="audit-company"
-              className="label-mono block text-foreground"
+              className="label block text-foreground"
             >
               Company
             </label>
@@ -151,7 +149,7 @@ export function AuditDemo() {
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              placeholder="Any company name. Yours, a portfolio company, anything."
+              placeholder="Any company. Yours, a portfolio company, anything."
               disabled={state.kind === "loading"}
               className="w-full rounded-sm border border-border bg-background px-3 py-2 text-base text-foreground outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent disabled:opacity-50"
             />
@@ -160,7 +158,7 @@ export function AuditDemo() {
           <div className="space-y-2">
             <label
               htmlFor="audit-workflow"
-              className="label-mono block text-foreground"
+              className="label block text-foreground"
             >
               The workflow
             </label>
@@ -173,16 +171,14 @@ export function AuditDemo() {
               disabled={state.kind === "loading"}
               className="w-full resize-none rounded-sm border border-border bg-background px-3 py-2 text-base leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent disabled:opacity-50"
             />
-            <p className="label-mono text-muted-foreground">
-              At least one sentence. More detail gets a better audit.
+            <p className="label text-muted-foreground">
+              At least one sentence. More detail produces a sharper audit.
             </p>
           </div>
 
           {/* Example chips */}
           <div className="space-y-2">
-            <div className="label-mono text-muted-foreground">
-              Or try one of these
-            </div>
+            <div className="label text-muted-foreground">Or try one</div>
             <div className="flex flex-wrap gap-2">
               {EXAMPLES.map((ex, i) => (
                 <button
@@ -190,7 +186,7 @@ export function AuditDemo() {
                   type="button"
                   onClick={() => loadExample(i)}
                   disabled={state.kind === "loading"}
-                  className="label-mono rounded-sm border border-border bg-background px-2 py-1 text-foreground/75 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+                  className="rounded-sm border border-border bg-background px-2.5 py-1 text-sm text-foreground/75 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
                 >
                   {ex.label}
                 </button>
@@ -216,7 +212,7 @@ export function AuditDemo() {
                 </>
               )}
             </button>
-            <span className="label-mono text-muted-foreground">
+            <span className="label text-muted-foreground">
               15 to 30 seconds, including the web search
             </span>
           </div>
@@ -234,11 +230,11 @@ export function AuditDemo() {
         <AuditOutput result={state.result} onReset={reset} />
       )}
 
-      <p className="label-mono text-muted-foreground">
-        Rate limited to five audits per session. If you want a deeper one,{" "}
+      <p className="label text-muted-foreground">
+        Rate limited to five audits per session. For a deeper one,{" "}
         <a
           href="mailto:rrp0620@gmail.com?subject=AI%20use%20case%20audit"
-          className="border-b border-accent text-foreground transition-colors hover:bg-accent/10"
+          className="text-accent underline decoration-accent decoration-1 underline-offset-[3px] transition-all hover:decoration-2"
         >
           email me
         </a>
@@ -256,21 +252,21 @@ function AuditOutput({
   onReset: () => void;
 }) {
   return (
-    <article className="space-y-10 rounded-md border border-border bg-card p-6 md:p-8">
+    <article className="space-y-10 rounded-sm border border-border bg-card p-6 md:p-8">
       <header className="space-y-5 border-b border-border pb-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
-            <div className="label-mono text-muted-foreground">
+            <div className="label text-muted-foreground">
               Audit for {result.company || "your company"}
             </div>
-            <h3 className="font-display text-2xl font-medium tracking-tight md:text-3xl">
+            <h3 className="text-2xl font-semibold tracking-tight md:text-3xl">
               Here&apos;s what I&apos;d look at.
             </h3>
           </div>
           <button
             type="button"
             onClick={onReset}
-            className="label-mono text-muted-foreground transition-colors hover:text-foreground"
+            className="label text-muted-foreground transition-colors hover:text-foreground"
           >
             ← Run another
           </button>
@@ -278,8 +274,8 @@ function AuditOutput({
 
         {/* Company snapshot — grounds the audit in real research */}
         {result.company_snapshot && (
-          <div className="rounded-sm border border-border/60 bg-background p-4">
-            <div className="mb-2 inline-flex items-center gap-1.5 label-mono text-muted-foreground">
+          <div className="rounded-sm border border-border bg-background p-4">
+            <div className="mb-2 inline-flex items-center gap-1.5 label text-muted-foreground">
               <span
                 aria-hidden
                 className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
@@ -295,9 +291,7 @@ function AuditOutput({
 
       {/* Where it bleeds */}
       <section className="space-y-4">
-        <div className="label-mono text-muted-foreground">
-          Where it bleeds
-        </div>
+        <div className="label text-muted-foreground">Where it bleeds</div>
         <ul className="space-y-3">
           {result.where_it_bleeds.map((point, i) => (
             <li key={i} className="flex gap-3 text-base leading-relaxed text-foreground/85">
@@ -312,16 +306,16 @@ function AuditOutput({
 
       {/* AI fit — two columns */}
       <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="space-y-3 rounded-sm border border-border/60 bg-background p-5">
-          <div className="label-mono text-muted-foreground">
+        <div className="space-y-3 rounded-sm border border-border bg-background p-5">
+          <div className="label text-muted-foreground">
             Where AI actually helps
           </div>
           <p className="text-base leading-relaxed text-foreground/85">
             {result.where_ai_helps}
           </p>
         </div>
-        <div className="space-y-3 rounded-sm border border-border/60 bg-background p-5">
-          <div className="label-mono text-muted-foreground">
+        <div className="space-y-3 rounded-sm border border-border bg-background p-5">
+          <div className="label text-muted-foreground">
             Where AI would be theater
           </div>
           <p className="text-base leading-relaxed text-foreground/85">
@@ -333,16 +327,16 @@ function AuditOutput({
       {/* Pilot */}
       <section className="space-y-5 border-t-2 border-accent pt-6">
         <div className="space-y-3">
-          <div className="label-mono text-accent">
+          <div className="label text-accent">
             The pilot I&apos;d ship first
           </div>
-          <h4 className="font-display text-2xl font-medium leading-tight tracking-tight md:text-[1.75rem]">
+          <h4 className="text-2xl font-semibold leading-tight tracking-tight md:text-[1.75rem]">
             {result.pilot.title}
           </h4>
           <p className="text-base leading-relaxed text-foreground/85">
             {result.pilot.what}
           </p>
-          <p className="font-display text-lg italic text-foreground">
+          <p className="text-lg font-medium text-foreground">
             {result.pilot.impact}
           </p>
         </div>

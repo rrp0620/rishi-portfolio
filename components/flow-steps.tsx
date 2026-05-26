@@ -24,8 +24,8 @@ export function FlowSteps({ steps, label = "Flow", className }: FlowStepsProps) 
   return (
     <section className={cn("space-y-3", className)}>
       <div className="flex items-end justify-between gap-4">
-        <div className="label-mono text-muted-foreground">{label}</div>
-        <div className="label-mono text-muted-foreground/70">
+        <div className="label text-muted-foreground">{label}</div>
+        <div className="label text-muted-foreground/70">
           {String(steps.length).padStart(2, "0")} steps
         </div>
       </div>
@@ -39,7 +39,7 @@ export function FlowSteps({ steps, label = "Flow", className }: FlowStepsProps) 
             key={i}
             className="flex flex-col gap-2 rounded-sm border border-border bg-card p-3"
           >
-            <span className="label-mono text-accent">
+            <span className="numeral text-sm font-semibold text-accent">
               {String(i + 1).padStart(2, "0")}
             </span>
             <span className="text-sm leading-snug text-foreground/85">
