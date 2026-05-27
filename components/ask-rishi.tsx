@@ -95,10 +95,6 @@ export function AskRishi() {
             answers in my voice and cites the sources behind each answer
             so you can read further.
           </p>
-          <p className="text-sm text-muted-foreground">
-            Inspired by Caleb Ixca&apos;s Q&A tool. Built directly against
-            the Gemini API. Five questions per session.
-          </p>
         </div>
       </div>
 
