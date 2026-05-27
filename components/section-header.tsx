@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 type SectionHeaderProps = {
-  /** Section label — kept as a plain string. No leading "01 /" prefix anymore. */
+  /** Section label — plain string, no leading number prefix. */
   label: string;
   /** Optional right-aligned metadata. Accepts a string or JSX. */
   meta?: React.ReactNode;
@@ -9,10 +9,10 @@ type SectionHeaderProps = {
 };
 
 /**
- * A simple section marker. A small uppercased label on the left, optional
- * metadata on the right, a hairline rule underneath. Replaces the previous
- * "01 / ABOUT" numbered editorial header — that pattern had become a tell
- * across AI-built portfolios.
+ * Section marker. Small uppercased label on the left, optional metadata
+ * on the right, an amber accent rule underneath. The amber rule echoes
+ * the highlighter behind the hero name and the underlines on the hero
+ * CTAs — the "yellow contrast fine line" tying the whole site together.
  */
 export function SectionHeader({
   label,
@@ -27,7 +27,7 @@ export function SectionHeader({
           <span className="label text-muted-foreground">{meta}</span>
         ) : null}
       </div>
-      <div className="rule" />
+      <div className="rule-accent" />
     </div>
   );
 }

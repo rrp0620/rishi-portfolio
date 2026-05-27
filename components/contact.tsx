@@ -48,7 +48,8 @@ export function Contact() {
         </ContactRow>
 
         <ContactRow label="Location">
-          Remote. Based in Delaware (US East Coast).
+          Remote. Based in Delaware (US East Coast). Open to relocating to
+          California.
         </ContactRow>
       </div>
     </section>

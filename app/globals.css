@@ -10,11 +10,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Type system — single workhorse sans. No display serif, no monospace.
-     Hierarchy comes from size and weight, not from font family changes.
-     Editorial portfolios that lean on Fraunces + mono have become a tell;
-     a single confident sans reads cleaner. */
+  /* Type system. One typeface — Inter — across the whole site. Weight
+     and scale do the hierarchy work. Earlier passes mixed in display
+     serifs (Fraunces, then Instrument Serif); both read as editorial-
+     template scaffolding. Single-typeface discipline is the move. */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -58,104 +59,112 @@
 }
 
 /*
- * Palette — near-white paper, near-black ink, a single deep-cobalt accent.
- * Restrained on purpose. The point of view is the work, not the chrome.
- * Accent only appears on links, the audit/ask CTAs, and a single hairline
- * under section labels. Everything else is type.
+ * Palette — Gloria Lo aesthetic translated to dark. Warm near-black
+ * background, off-white type, one warm amber accent used the way Gloria
+ * uses yellow highlighter (behind the name, on the audit CTA). Project
+ * sections later get their own muted color bands.
+ *
+ * Dark IS the canonical experience. Light mode kept as an option for
+ * users who explicitly toggle, but the design is tuned for dark.
  */
 :root {
-  --background: oklch(0.99 0.002 90);
-  --foreground: oklch(0.16 0 0);
+  /* Dark-by-default. Warm near-black, not pure black. */
+  --background: oklch(0.155 0.006 60);
+  --foreground: oklch(0.95 0.005 80);
 
-  --card: oklch(0.985 0.002 90);
-  --card-foreground: oklch(0.16 0 0);
+  --card: oklch(0.205 0.006 60);
+  --card-foreground: oklch(0.95 0.005 80);
 
-  --popover: oklch(0.99 0.002 90);
-  --popover-foreground: oklch(0.16 0 0);
+  --popover: oklch(0.205 0.006 60);
+  --popover-foreground: oklch(0.95 0.005 80);
 
-  --primary: oklch(0.18 0 0);
-  --primary-foreground: oklch(0.99 0.002 90);
+  --primary: oklch(0.95 0.005 80);
+  --primary-foreground: oklch(0.155 0.006 60);
 
-  --secondary: oklch(0.96 0.002 90);
-  --secondary-foreground: oklch(0.22 0 0);
+  --secondary: oklch(0.25 0.006 60);
+  --secondary-foreground: oklch(0.95 0.005 80);
 
-  --muted: oklch(0.96 0.002 90);
-  --muted-foreground: oklch(0.42 0 0);
+  --muted: oklch(0.25 0.006 60);
+  --muted-foreground: oklch(0.7 0.008 70);
 
-  /* Deep cobalt-indigo. Sparingly used. */
-  --accent: oklch(0.42 0.15 264);
-  --accent-foreground: oklch(0.99 0.002 90);
+  /* Warm amber — the highlighter color. Saturated enough to pop on dark,
+     warm enough to feel hand-placed not LED. */
+  --accent: oklch(0.82 0.16 85);
+  --accent-foreground: oklch(0.155 0.006 60);
 
-  --destructive: oklch(0.577 0.245 27.325);
-
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0.42 0.15 264);
-
-  --chart-1: oklch(0.42 0.15 264);
-  --chart-2: oklch(0.42 0 0);
-  --chart-3: oklch(0.6 0 0);
-  --chart-4: oklch(0.75 0 0);
-  --chart-5: oklch(0.85 0 0);
-
-  --radius: 0.25rem;
-
-  --sidebar: oklch(0.99 0.002 90);
-  --sidebar-foreground: oklch(0.16 0 0);
-  --sidebar-primary: oklch(0.42 0.15 264);
-  --sidebar-primary-foreground: oklch(0.99 0.002 90);
-  --sidebar-accent: oklch(0.96 0.002 90);
-  --sidebar-accent-foreground: oklch(0.22 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: oklch(0.42 0.15 264);
-}
-
-/*
- * Dark mode — near-black, off-white type, slightly brighter cobalt for
- * contrast. Auto-applied via the theme bootstrap script in layout.tsx.
- */
-.dark {
-  --background: oklch(0.13 0 0);
-  --foreground: oklch(0.96 0 0);
-
-  --card: oklch(0.18 0 0);
-  --card-foreground: oklch(0.96 0 0);
-
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(0.96 0 0);
-
-  --primary: oklch(0.96 0 0);
-  --primary-foreground: oklch(0.18 0 0);
-
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: oklch(0.94 0 0);
-
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.7 0 0);
-
-  --accent: oklch(0.7 0.14 260);
-  --accent-foreground: oklch(0.16 0 0);
+  /* Project category bands. Muted darker shades — pastels translated to
+     dark. Each project type gets one. Used as section backgrounds, not
+     as little accent dots. */
+  --band-day-job: oklch(0.32 0.05 230);    /* muted steel blue */
+  --band-customer: oklch(0.32 0.08 50);    /* muted terracotta */
+  --band-personal: oklch(0.32 0.05 150);   /* muted moss */
 
   --destructive: oklch(0.704 0.191 22.216);
 
-  --border: oklch(1 0 0 / 14%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.7 0.14 260);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.82 0.16 85);
 
-  --chart-1: oklch(0.7 0.14 260);
-  --chart-2: oklch(0.72 0 0);
+  --chart-1: oklch(0.82 0.16 85);
+  --chart-2: oklch(0.7 0.008 70);
   --chart-3: oklch(0.55 0 0);
   --chart-4: oklch(0.4 0 0);
   --chart-5: oklch(0.3 0 0);
 
-  --sidebar: oklch(0.16 0 0);
-  --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: oklch(0.7 0.14 260);
-  --sidebar-primary-foreground: oklch(0.16 0 0);
-  --sidebar-accent: oklch(0.22 0 0);
-  --sidebar-accent-foreground: oklch(0.94 0 0);
-  --sidebar-border: oklch(1 0 0 / 14%);
-  --sidebar-ring: oklch(0.7 0.14 260);
+  --radius: 0.25rem;
+
+  --sidebar: oklch(0.155 0.006 60);
+  --sidebar-foreground: oklch(0.95 0.005 80);
+  --sidebar-primary: oklch(0.82 0.16 85);
+  --sidebar-primary-foreground: oklch(0.155 0.006 60);
+  --sidebar-accent: oklch(0.25 0.006 60);
+  --sidebar-accent-foreground: oklch(0.95 0.005 80);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.82 0.16 85);
+}
+
+/*
+ * Light mode — kept as an optional alternate for users who toggle.
+ * Same warm amber accent, light paper background. Not the primary design.
+ */
+.light {
+  --background: oklch(0.985 0.005 80);
+  --foreground: oklch(0.18 0.006 60);
+
+  --card: oklch(0.975 0.005 80);
+  --card-foreground: oklch(0.18 0.006 60);
+
+  --popover: oklch(0.985 0.005 80);
+  --popover-foreground: oklch(0.18 0.006 60);
+
+  --primary: oklch(0.2 0.006 60);
+  --primary-foreground: oklch(0.985 0.005 80);
+
+  --secondary: oklch(0.95 0.005 80);
+  --secondary-foreground: oklch(0.22 0.006 60);
+
+  --muted: oklch(0.95 0.005 80);
+  --muted-foreground: oklch(0.45 0.006 60);
+
+  --accent: oklch(0.78 0.18 85);
+  --accent-foreground: oklch(0.18 0.006 60);
+
+  --band-day-job: oklch(0.88 0.05 230);
+  --band-customer: oklch(0.88 0.08 50);
+  --band-personal: oklch(0.88 0.05 150);
+
+  --border: oklch(0.9 0.005 80);
+  --input: oklch(0.9 0.005 80);
+  --ring: oklch(0.78 0.18 85);
+
+  --sidebar: oklch(0.985 0.005 80);
+  --sidebar-foreground: oklch(0.18 0.006 60);
+  --sidebar-primary: oklch(0.78 0.18 85);
+  --sidebar-primary-foreground: oklch(0.18 0.006 60);
+  --sidebar-accent: oklch(0.95 0.005 80);
+  --sidebar-accent-foreground: oklch(0.22 0.006 60);
+  --sidebar-border: oklch(0.9 0.005 80);
+  --sidebar-ring: oklch(0.78 0.18 85);
 }
 
 @layer base {
@@ -228,6 +237,43 @@
   .rule-accent {
     height: 2px;
     background: var(--accent);
+  }
+
+  /* Back-compat: .font-display now resolves to heavy Inter. Use
+     font-black + tight tracking directly on new components instead. */
+  .font-display {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+  }
+
+  /* Keyword highlight inside body copy. Reserved — currently unused while
+     the design moves to highlighter-style emphasis instead of color. */
+  .kw {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+
+  /* Marker-highlighter background, Gloria Lo style. The linear-gradient
+     draws a band across the lower 60% of the text only — reads like a
+     real marker pen instead of a fully-filled background.
+     Text color stays as foreground (white in dark mode, dark in light)
+     so the letters are always readable both on the amber band AND on the
+     bare background above it. Earlier version flipped color to
+     accent-foreground, which made the upper portion of each letter
+     invisible against the page background. */
+  .highlight {
+    background-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 30%,
+      var(--accent) 30%,
+      var(--accent) 90%,
+      transparent 90%
+    );
+    padding: 0 0.18em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 }
 

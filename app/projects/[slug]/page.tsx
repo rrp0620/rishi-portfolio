@@ -73,7 +73,7 @@ export default async function ProjectPage({
 
         {/* Hero */}
         <header className="mt-6 space-y-5 border-b border-border pb-10">
-          <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+          <h1 className="text-4xl font-black leading-[1.05] tracking-tight md:text-6xl">
             {project.title}
           </h1>
           <p className="max-w-2xl text-lg leading-snug text-foreground/80 md:text-xl">

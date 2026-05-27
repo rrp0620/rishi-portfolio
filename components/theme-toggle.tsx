@@ -10,15 +10,16 @@
 export function ThemeToggle() {
   function toggle() {
     const root = document.documentElement;
-    if (root.classList.contains("dark")) {
-      root.classList.remove("dark");
+    // Dark is canonical; this toggle just opts INTO light mode and back out.
+    if (root.classList.contains("light")) {
+      root.classList.remove("light");
       try {
-        localStorage.setItem("theme", "light");
+        localStorage.removeItem("theme");
       } catch {}
     } else {
-      root.classList.add("dark");
+      root.classList.add("light");
       try {
-        localStorage.setItem("theme", "dark");
+        localStorage.setItem("theme", "light");
       } catch {}
     }
   }
@@ -31,10 +32,12 @@ export function ThemeToggle() {
       title="Toggle theme"
       className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-border bg-card text-foreground transition-colors hover:bg-secondary"
     >
-      <span className="dark:hidden">
+      {/* Default (dark mode) shows the sun — click to swap to light.
+          In light mode the moon shows — click to swap back to dark. */}
+      <span className="hidden [.light_&]:inline-flex">
         <MoonIcon />
       </span>
-      <span className="hidden dark:inline-flex">
+      <span className="inline-flex [.light_&]:hidden">
         <SunIcon />
       </span>
     </button>

@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+// One typeface across the whole site. Weight does the work — 900 for
+// the hero name and project titles, 500 for small caps labels, 400 for
+// body. Earlier attempts mixed Inter with a display serif (Fraunces,
+// then Instrument Serif). Both reads as editorial-template scaffolding.
+// Single-typeface discipline is more confident.
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -30,18 +36,17 @@ export const metadata: Metadata = {
   },
 };
 
-// Inline script that applies the user's saved theme (or their system
-// preference) BEFORE React hydrates. Without this you'd see a flash of
-// the wrong theme on every page load. The matching toggle component
-// writes to localStorage so this script picks it up next time.
+// Inline script that applies the user's saved theme BEFORE React hydrates.
+// Dark is canonical; light is only applied if the user has explicitly
+// toggled to it (stored in localStorage). System preference is ignored so
+// dark-loving users on light-mode systems get the design as intended, and
+// vice versa via the toggle.
 const themeBootstrap = `
   (function() {
     try {
       var stored = localStorage.getItem('theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = stored || (prefersDark ? 'dark' : 'light');
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
+      if (stored === 'light') {
+        document.documentElement.classList.add('light');
       }
     } catch (e) {}
   })();
