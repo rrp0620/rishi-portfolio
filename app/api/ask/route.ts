@@ -37,6 +37,8 @@ function buildSystemPrompt(): string {
 
   return `You are answering questions about Rishi Patel for visitors to his portfolio site. Most visitors are recruiters or hiring managers evaluating him for AI deployment roles (AI Outcomes Manager, AI Solutions Manager, Forward Deployed Strategist, AI Enablement Lead).
 
+This is a multi-turn chat. You may receive several prior turns of conversation. Respond ONLY to the most recent user message, but use the earlier turns as context. If the user is following up on something you just said, treat it as a follow-up — don't re-introduce yourself or restate background.
+
 You speak as Rishi, in his voice, in the first person. Never refer to him in the third person inside the answer field.
 
 ${VOICE_RULES}
@@ -138,11 +140,18 @@ function normalize(value: unknown): AskResult | null {
 async function callGemini(
   apiKey: string,
   systemPrompt: string,
-  userMessage: string,
+  messages: { role: "user" | "rishi"; content: string }[],
 ): Promise<Response> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
     MODEL,
   )}:generateContent`;
+
+  // Translate our chat shape to Gemini's contents format. Our "rishi" role
+  // maps to Gemini's "model" role.
+  const contents = messages.map((m) => ({
+    role: m.role === "rishi" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
 
   return fetch(url, {
     method: "POST",
@@ -151,7 +160,7 @@ async function callGemini(
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: userMessage }] }],
+      contents,
       systemInstruction: { parts: [{ text: systemPrompt }] },
       generationConfig: {
         temperature: TEMPERATURE,
@@ -200,19 +209,48 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: { question?: string };
+  let body: {
+    question?: string;
+    messages?: { role?: "user" | "rishi"; content?: string }[];
+  };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: "Send a JSON body with a `question` field." },
+      { error: "Send a JSON body with a `messages` array or a `question` field." },
       { status: 400 },
     );
   }
 
-  const question = (body.question ?? "").trim().slice(0, 800);
+  // Accept two shapes for backward compatibility:
+  //   - { question }                   — single-turn (legacy)
+  //   - { messages: [{role, content}]} — multi-turn chat
+  type Msg = { role: "user" | "rishi"; content: string };
+  let messages: Msg[] = [];
+  if (Array.isArray(body.messages) && body.messages.length > 0) {
+    messages = body.messages
+      .filter(
+        (m): m is Msg =>
+          !!m &&
+          (m.role === "user" || m.role === "rishi") &&
+          typeof m.content === "string" &&
+          m.content.trim().length > 0,
+      )
+      .map((m) => ({ role: m.role, content: m.content.slice(0, 1500) }));
+  } else if (typeof body.question === "string") {
+    const q = body.question.trim().slice(0, 800);
+    if (q.length > 0) messages = [{ role: "user", content: q }];
+  }
 
-  if (question.length < 4) {
+  if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
+    return NextResponse.json(
+      { error: "Send at least one user message." },
+      { status: 400 },
+    );
+  }
+
+  const lastUser = messages[messages.length - 1].content.trim();
+  if (lastUser.length < 4) {
     return NextResponse.json(
       { error: "Ask a real question. A few words at minimum." },
       { status: 400 },
@@ -222,7 +260,7 @@ export async function POST(request: Request) {
   const systemPrompt = buildSystemPrompt();
   let response: Response;
   try {
-    response = await callGemini(apiKey, systemPrompt, question);
+    response = await callGemini(apiKey, systemPrompt, messages);
   } catch (e) {
     console.error("ask fetch threw", e);
     return NextResponse.json(

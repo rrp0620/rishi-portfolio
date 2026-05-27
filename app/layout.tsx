@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AskRishi } from "@/components/ask-rishi";
 
 // One typeface across the whole site. Weight does the work — 900 for
 // the hero name and project titles, 500 for small caps labels, 400 for
@@ -64,6 +65,8 @@ export default function RootLayout({
       >
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         {children}
+        {/* Floating chat bubble — available on every page. */}
+        <AskRishi />
       </body>
     </html>
   );

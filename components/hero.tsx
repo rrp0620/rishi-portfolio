@@ -1,25 +1,28 @@
+"use client";
+
 import Image from "next/image";
 
 /**
- * Hero — Gloria Lo direction, translated to dark.
+ * Hero — Gloria Lo direction translated to dark.
  *
- *   • Heavy bold sans (Inter 900) for "Hi, I'm Rishi Patel" — chunky
- *     wordmark, not a serif. Display serif is reserved for project titles
- *     elsewhere on the site.
- *   • Warm amber marker-highlighter behind the name. Marker-style band
- *     (not a flat fill) via the .highlight utility.
- *   • Clean headshot: square framing, subtle 1px muted border, no
- *     offset shadow, no bright ring.
- *   • Plain underlined-text links for the two CTAs instead of filled
- *     buttons. Less chrome.
- *
- * Everything else stays Inter at body weight. No cobalt anywhere.
+ *   • Heavy Inter 900 for "Hi, I'm Rishi Patel" (one typeface across the
+ *     whole site, weight does the hierarchy work).
+ *   • Warm amber marker-highlighter behind the name, drawn across the
+ *     lower 60% of the text via .highlight (linear-gradient trick).
+ *   • Headshot: clean circle, 1px muted border, no shadow.
+ *   • Two CTAs: "Try the live audit" anchors to the audit demo. "Ask me
+ *     anything" dispatches a custom event that the floating chat bubble
+ *     (mounted in layout.tsx) listens for and opens its panel.
  */
 export function Hero() {
+  function openAsk(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent("open-ask-rishi"));
+  }
+
   return (
     <section className="space-y-10 pt-2">
       <div className="grid grid-cols-1 items-center gap-x-12 gap-y-8 md:grid-cols-[auto_1fr]">
-        {/* Headshot — clean, no shadow, no accent ring */}
         <Image
           src="/headshot.JPG"
           alt="Rishi Patel"
@@ -29,7 +32,6 @@ export function Hero() {
           className="h-[128px] w-[128px] rounded-full border border-border object-cover md:h-[156px] md:w-[156px]"
         />
 
-        {/* Name + intro */}
         <div className="space-y-5">
           <h1 className="text-5xl font-black leading-[1] tracking-tight text-foreground/90 md:text-[5.25rem]">
             Hi, I&apos;m <span className="highlight">Rishi Patel</span>
@@ -56,9 +58,10 @@ export function Hero() {
         </span>
         <a
           href="#ask"
+          onClick={openAsk}
           className="text-base text-foreground underline decoration-accent decoration-2 underline-offset-[6px] transition-colors hover:text-accent"
         >
-          Ask me anything
+          Chat with me
         </a>
       </div>
     </section>

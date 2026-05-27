@@ -277,6 +277,52 @@
   }
 }
 
+/* Chat bubble pulse — a single expanding ring that draws the eye to
+   the chat pill without nagging. Runs continuously when the chat is
+   closed, stops when it's open. */
+@keyframes chat-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.chat-pulse::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  z-index: -1;
+  animation: chat-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+/* Teaser entrance — slide up + fade in, with a slight delay built in
+   via the JS that mounts it. */
+@keyframes chat-teaser-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-teaser {
+  animation: chat-teaser-in 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /*
  * Prose tuning — keeps the magazine feel inside project walkthroughs.
  */
