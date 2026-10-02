@@ -17,7 +17,7 @@ const inter = Inter({
 
 const TITLE = "Rishi Patel · Portfolio";
 const DESCRIPTION =
-  "I work with executives to ship AI use cases that move real numbers. Senior analyst on the business planning team at a public company, reporting to the Chief Business Officer. Customer-facing AI builds for small businesses on the side. Open to AI deployment roles.";
+  "I build the systems and AI workflows behind revenue numbers: lead scoring and routing, data quality, and executive reporting. Business Performance Analyst at a public company, the first hire on a new team inside business planning, reporting to the Chief Business Officer. Customer-facing AI builds for small businesses on the side. Open to GTM Engineering and AI deployment roles.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rishi-portfolio-brown.vercel.app"),

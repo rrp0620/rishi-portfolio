@@ -11,7 +11,7 @@ import { PROJECTS, type Project } from "@/lib/projects";
  *   - Hierarchy through scale and weight, not color variety.
  *   - Generous internal padding (8/12) so each card feels like its own
  *     surface, not a list row.
- *   - Numerals (01-07) sit in display serif on the left as the visual
+ *   - Numerals (01-08) sit in display serif on the left as the visual
  *     anchor — restrained at rest, amber on hover, ornament not decoration.
  *   - Card width stays inside the page container (max-w-5xl). Earlier
  *     full-bleed band approach was too loud once the per-block colors
@@ -26,9 +26,10 @@ export function WorkSection() {
       />
 
       <p className="max-w-2xl text-base leading-relaxed text-foreground/85">
-        Day-job builds for the executive team I report to up top, then the
-        case study, then customer builds, then a personal experiment. Same
-        methodology across all of them. Click any card for the walkthrough.
+        A GTM systems build on real CRM data up top, then day-job builds for
+        the executive team I report to, then the case study, then customer
+        builds, then a personal experiment. Same methodology across all of
+        them. Click any card for the walkthrough.
       </p>
 
       <ul className="space-y-3">
