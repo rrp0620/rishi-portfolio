@@ -226,7 +226,7 @@ Both ship with the same prompt generator script pattern Rishi reuses across buil
   {
     slug: "paysplitt",
     title: "Paysplitt — a credit-card spending router",
-    body: `Rishi's first end-to-end AI-coded product. Live at paysplitt.com. A credit-card spending router: you authorize your cards, set rules (spending caps per card, merchant categories pinned to certain cards), and Paysplitt picks the right card at the point of sale. Auto-router mode uses a small LLM call to choose the card that maximizes rewards on each purchase. Stripe Connect handles the actual routing.
+    body: `Rishi's first end-to-end AI-coded product. It's no longer live; the walkthrough on this site covers how it was built. A credit-card spending router: you authorize your cards, set rules (spending caps per card, merchant categories pinned to certain cards), and Paysplitt picks the right card at the point of sale. Auto-router mode uses a small LLM call to choose the card that maximizes rewards on each purchase. Stripe Connect handles the actual routing.
 
 Built across 45 consecutive days using Cursor and Claude. The point was the discipline, not the launch — it taught Rishi the production AI patterns the other projects shipped against in days instead of weeks.`,
   },

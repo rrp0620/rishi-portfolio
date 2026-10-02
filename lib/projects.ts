@@ -203,12 +203,11 @@ export const PAYSPLITT: Project = {
   subtitle:
     "First end-to-end AI-coded product. A credit-card spending router that splits purchases by rule or by rewards.",
   summary:
-    "Authorize your cards, set rules (or use the auto-router), and Paysplitt picks the right card at the point of sale. Auto-router mode uses a small LLM call to choose the card that maximizes rewards on each purchase. Built end to end with Cursor and Claude across 45 consecutive days. Stripe Connect handles the actual routing. Live at paysplitt.com.",
+    "Authorize your cards, set rules (or use the auto-router), and Paysplitt picks the right card at the point of sale. Auto-router mode uses a small LLM call to choose the card that maximizes rewards on each purchase. Built end to end with Cursor and Claude across 45 consecutive days. Stripe Connect handles the actual routing.",
   stack: ["Next.js", "Stripe Connect", "Supabase", "Cursor + Claude"],
-  label: "Personal · live",
+  label: "Personal · experiment",
   year: "2025",
   readTime: "~3 min read",
-  liveUrl: "https://paysplitt.com",
   audience: "For myself, as a build-discipline experiment",
   outcome: "45 days of consecutive shipping. Production AI patterns I reuse since.",
   architectureSteps: [

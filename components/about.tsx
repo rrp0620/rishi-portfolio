@@ -36,7 +36,7 @@ export function About() {
             On the side I&apos;ve built customer-facing AI for an escape
             room owner trying to stop losing money, a liquor store working
             through distributor invoices manually every week, and a
-            fintech side project that&apos;s live at paysplitt.com. Same
+            fintech side project called Paysplitt. Same
             methodology each time: shadow the actual workflow, get the
             data into one shape, then put a thin AI layer where the user
             already works. The part most engagements skip is the handoff.

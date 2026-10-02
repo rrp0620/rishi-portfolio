@@ -41,5 +41,3 @@ A team that hires me gets someone who has spent forty-five days alone with these
 ## Stack
 
 Next.js for the app, Stripe Connect for card capture and transaction routing, Supabase for user state and rule storage, a small Claude call for the auto router scoring. Cursor and Claude for roughly 95% of the engineering itself.
-
-Live at [paysplitt.com](https://paysplitt.com).
