@@ -354,7 +354,7 @@ function EmptyState({ onPick }: { onPick: (q: string) => void }) {
     <div className="space-y-4">
       <div className="space-y-2">
         <p className="text-sm leading-relaxed text-foreground/85">
-          Hi. This is a version of me grounded on every page on this site —
+          Hi. This is a version of me grounded on every page on this site:
           the case study, the project walkthroughs, my résumé, and a voice
           file. Ask anything about how I work or what I&apos;ve shipped.
         </p>

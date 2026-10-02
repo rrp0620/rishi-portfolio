@@ -42,13 +42,13 @@ If you don't know the answer from the sources below, say so plainly. Do not inve
 `.trim();
 
 export const BIO = `
-Rishi Patel is currently a senior analyst on the business planning team at a public company, reporting to the Chief Business Officer. The role is exec reporting and the kind of analytics that catches bad numbers before they reach a slide.
+Rishi Patel is currently a Business Performance Analyst at a public company. He was the first hire on a new Business Performance team inside business planning, reporting to the Chief Business Officer. The role is exec reporting and the kind of analytics that catches bad numbers before they reach a slide.
 
-He's based in Middletown, Delaware (US East Coast). He's open to remote AI deployment roles: AI Outcomes Manager, AI Solutions Manager, Forward Deployed Strategist, AI Enablement Lead. Targeting $150-180k+. Especially interested in AI-native vendors like Glean, Vercel, Anthropic, OpenAI, Cresta, Decagon, ElevenLabs.
+He's based in Middletown, Delaware (US East Coast). He's open to remote GTM Engineering, Revenue Operations, AI Solutions, Forward Deployed, and AI Adoption roles. His work centers on building the systems and AI workflows behind revenue numbers: lead scoring and routing, data quality, and executive reporting.
 
 Career history (most recent first):
-- 2023-present: Credit Acceptance Corporation. Started in GTM Sales and Marketing Analytics (Nov 2023 - Apr 2026). Moved to Senior Analyst, Business Planning and Analysis (Apr 2026 - present) reporting to the CBO. Owns reporting and tracking for the executive team's strategic initiatives. Built the AI tools described in the project pages on this site.
-- 2019-2023: RippleMatch, NYC. Operations Manager → Senior Operations Manager on the growth team. Marketplace scaled 4×, went from 2 verticals to 8.
+- 2023-present: Credit Acceptance Corporation. Started in GTM Sales and Marketing Analytics (Nov 2023 - Apr 2026). Moved to Business Performance Analyst (Apr 2026 - present), the first hire on a new Business Performance team inside business planning, reporting to the CBO. Owns reporting and tracking for the executive team's strategic initiatives. Built the AI tools described in the project pages on this site.
+- 2019-2023: RippleMatch, NYC. Operations Manager → Senior Operations Manager on the growth team. Marketplace scaled 4×, went from 2 verticals to 8. Led the Salesforce implementation, built a lead-scoring formula in Salesforce with the BD leads and sales execs, and used Apollo to source and enrich leads for supply-side acquisition.
 - 2018-2019: US Green Battery, consulting GTM/RevOps role.
 - 2012-2018: Triton Solar. Founding partner, ran operations, finance, and GTM for a clean energy hardware company.
 
@@ -105,6 +105,15 @@ Specific cases where I'd push back on an AI-first answer:
 - Cases where the customer wants AI to make the decision instead of the human. That's not deployment, that's automation, and the failure modes are different.`,
   },
   {
+    slug: "strongest-project-gtm",
+    title: "The strongest project on the site for a GTM Engineering role",
+    body: `GTM Signal. It's a lead-to-opportunity funnel tool on 8,800 real B2B CRM records, and it covers the whole path a GTM Engineer owns: a data-quality pass that found 9 issues, 9 cross-table reconciliation checks, a rules-based lead score back-tested on 6,711 won and lost deals, routing by territory and rep capacity, and an AI brief where every number has to cite a computed metric. The score didn't predict win rate (z = 0.05), and I said so on the page. I use it to set queue order because it ranks expected value.
+
+Second is the Salesforce work at RippleMatch. I led the Salesforce implementation, built a lead-scoring formula in Salesforce with the BD leads and sales execs, and used Apollo to source and enrich leads for supply-side acquisition.
+
+Third is the WBR automation at my day job. It's a Claude Code script that pulls the data, flags anomalies, and drafts the executive weekly business review. Prep went from roughly half a day to roughly 30 minutes, with a human review pass on every section.`,
+  },
+  {
     slug: "strongest-project",
     title: "The strongest project on the site for a Forward Deployed / AI Outcomes role",
     body: `The early warning system at my day job. It's the only project on the site that was: exec-sponsored, scoped with the field before any model code, deployed across four levels of an org (account managers → district leads → regional VPs → execs), and instrumented so field leadership can change the alert criteria themselves through a config layer instead of needing me. That's the shape of an AI Outcomes engagement at almost any AI vendor.
@@ -123,6 +132,21 @@ End state: the customer can change how the AI behaves without touching code, and
 ];
 
 export const SOURCES: Source[] = [
+  {
+    slug: "gtm-signal",
+    title: "GTM Signal: a lead-to-opportunity funnel tool",
+    body: `A lead-to-opportunity funnel tool Rishi built on 8,800 real B2B CRM records from a public Maven Analytics dataset. Live at revops-signal.netlify.app. Built with React, Vite, Netlify Functions, and the Claude API with structured outputs.
+
+Data quality first: a data-quality pass found 9 issues. 1,425 of 2,089 open leads (68%) have no account. A product-name mismatch silently broke a join on 1,480 rows. The tool runs 9 cross-table reconciliation checks.
+
+Lead scoring: rules-based, with the rules published on the page. Back-tested on 6,711 won and lost deals. The score did not predict win rate (z = 0.05), and Rishi says so on the page. It ranks expected value, so it sets queue order.
+
+Routing: by territory and rep capacity. Current owners keep leads while under the cap. Overflow leads and leads with no account go to enrichment.
+
+AI brief: returns structured JSON. Every number must cite a computed metric, and that is checked server-side. Briefs that fail the check are held for human review. The page includes forced-failure tests.
+
+Next step identified: an enrichment workflow, since 68% of open leads can't be scored or routed.`,
+  },
   {
     slug: "early-warning",
     title: "An early warning system for accounts at risk",

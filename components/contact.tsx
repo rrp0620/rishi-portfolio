@@ -43,8 +43,8 @@ export function Contact() {
         </ContactRow>
 
         <ContactRow label="Open to">
-          AI Outcomes Manager, AI Solutions, Forward Deployed Strategist,
-          and AI Adoption roles at AI-native vendors. Remote, US East.
+          GTM Engineering, Revenue Operations, AI Solutions, Forward
+          Deployed, and AI Adoption roles. Remote, US East.
         </ContactRow>
 
         <ContactRow label="Location">

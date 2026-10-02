@@ -18,8 +18,10 @@ export function About() {
 
         <div className="space-y-4 text-base leading-relaxed text-foreground/85">
           <p>
-            Right now I&apos;m on the business planning team at a public
-            company, reporting to the Chief Business Officer. The role is
+            Right now I&apos;m a Business Performance Analyst at a public
+            company. I was the first hire on a new Business Performance team
+            inside business planning, reporting to the Chief Business
+            Officer. The role is
             the usual mix of executive reporting and the kind of analytics
             that catches bad numbers before they reach a slide. The
             interesting half is what&apos;s been built on top of that role:
@@ -45,7 +47,10 @@ export function About() {
           <p>
             Before this I spent four years on the growth team at
             RippleMatch, scaling a marketplace 4× and expanding it from two
-            verticals to eight. Earlier I cofounded Triton Solar, a clean
+            verticals to eight. I led the Salesforce implementation there,
+            built a lead-scoring formula in Salesforce with the BD leads and
+            sales execs, and used Apollo to source and enrich leads for
+            supply-side acquisition. Earlier I cofounded Triton Solar, a clean
             energy hardware company where I ran operations and GTM and
             handled international supply.
           </p>

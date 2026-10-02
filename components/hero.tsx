@@ -37,11 +37,13 @@ export function Hero() {
             Hi, I&apos;m <span className="highlight">Rishi Patel</span>
           </h1>
           <p className="max-w-2xl text-lg leading-snug text-foreground/85 md:text-xl">
-            I work with executives to ship AI use cases that move real
-            numbers. By day I&apos;m on the business planning team at a
-            public company, reporting to the Chief Business Officer. On
-            the side I build customer-facing AI for small businesses. Open
-            to AI deployment roles.
+            I build the systems and AI workflows behind revenue numbers:
+            lead scoring and routing, data quality, and executive
+            reporting. By day I&apos;m a Business Performance Analyst at a
+            public company, the first hire on a new team inside business
+            planning, reporting to the Chief Business Officer. On the side
+            I build customer-facing AI for small businesses. Open to GTM
+            Engineering and AI deployment roles.
           </p>
         </div>
       </div>

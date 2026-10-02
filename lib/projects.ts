@@ -34,6 +34,35 @@ export type Project = {
   outcome?: string;
 };
 
+export const GTM_SIGNAL: Project = {
+  slug: "gtm-signal",
+  title: "GTM Signal: a lead-to-opportunity funnel tool",
+  subtitle:
+    "Data quality, lead scoring, routing, and an AI brief built on 8,800 real B2B CRM records.",
+  summary:
+    "A funnel tool built on 8,800 B2B CRM records from a public Maven Analytics dataset. I ran a data-quality pass first and found 9 issues, including 1,425 of 2,089 open leads (68%) with no account. The lead score uses published rules and was back-tested on 6,711 won and lost deals. It didn't predict win rate, and the page says so. Routing assigns leads by territory and rep capacity, and an AI brief cites a computed metric for every number it states.",
+  stack: [
+    "React",
+    "Vite",
+    "Netlify Functions",
+    "Claude API",
+    "Structured outputs",
+  ],
+  label: "GTM systems build · live",
+  year: "2026",
+  readTime: "~4 min read",
+  liveUrl: "https://revops-signal.netlify.app",
+  audience: "For a revenue team working a lead queue",
+  outcome: "9 data-quality issues found. 68% of open leads flagged for enrichment.",
+  architectureSteps: [
+    "Data-quality pass",
+    "Cross-table reconciliation",
+    "Rules-based lead scoring",
+    "Territory and capacity routing",
+    "AI brief with checked citations",
+  ],
+};
+
 export const EARLY_WARNING: Project = {
   slug: "early-warning",
   title: "An early warning system for accounts at risk",
@@ -192,6 +221,7 @@ export const PAYSPLITT: Project = {
 };
 
 export const PROJECTS: Project[] = [
+  GTM_SIGNAL,
   EARLY_WARNING,
   WBR_COPILOT,
   DATA_DICTIONARY,

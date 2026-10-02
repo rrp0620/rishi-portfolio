@@ -57,9 +57,9 @@ export default function OpengraphImage() {
               maxWidth: 1000,
             }}
           >
-            I work with executives to ship AI use cases that move real
-            numbers. Senior analyst on the business planning team at a
-            public company, reporting to the Chief Business Officer.
+            I build the systems and AI workflows behind revenue numbers.
+            Business Performance Analyst at a public company, reporting to
+            the Chief Business Officer.
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export default function OpengraphImage() {
               background: "#1f3a8a",
             }}
           />
-          <span>Open to AI deployment roles</span>
+          <span>Open to GTM Engineering and AI deployment roles</span>
         </div>
       </div>
     ),
