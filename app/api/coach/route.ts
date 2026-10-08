@@ -145,7 +145,10 @@ export async function GET(request: Request) {
     new Request(request.url, {
       method: "POST",
       headers: request.headers,
-      body: JSON.stringify({ ask: u.searchParams.get("ask") ?? "", transcript: [] }),
+      body: JSON.stringify({
+        ask: u.searchParams.get("ask") ?? "",
+        transcript: (u.searchParams.get("t") ?? "").split("|").filter(Boolean),
+      }),
     }),
   );
 }
