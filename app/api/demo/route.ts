@@ -12,7 +12,7 @@ function corsHeaders(request: Request): Record<string, string> {
   let ok = false;
   try {
     const host = new URL(origin).hostname;
-    ok = host === "websageinc.com" || host.endsWith(".websageinc.com") || host.endsWith(".netlify.app") || host === "localhost";
+    ok = host === "websageinc.com" || host === "websage-demos.vercel.app" || host.endsWith(".websageinc.com") || host.endsWith(".netlify.app") || host === "localhost";
   } catch {}
   return ok
     ? {
