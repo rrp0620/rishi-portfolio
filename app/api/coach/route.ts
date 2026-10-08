@@ -68,8 +68,19 @@ If not "none", give the rep a reply they can say out loud right now: 1 to 3 shor
 KNOWLEDGE:
 ${COACH_KB}
 
-OUTPUT: one JSON object only:
+The last transcript line may be a sentence the owner is STILL SAYING (cut off mid-word). Anticipate the most likely full question and answer it now; speed matters more than waiting.`;
+
+const OUTPUT_JSON = `OUTPUT: one JSON object only:
 {"type":"question|objection|buying|none","heard":"what they asked or said, max 12 words","say":"the reply to say out loud","facts":["up to 3 short supporting facts or numbers from the knowledge"],"next":"one short suggested next move, e.g. ask for the sale, lock a follow-up time"}`;
+
+// Line protocol so the client can render the reply while it streams.
+const OUTPUT_LINES = `OUTPUT: plain text, these lines in this exact order, nothing else:
+TYPE: question|objection|buying|none
+HEARD: what they asked or said, max 12 words
+SAY: the reply to say out loud, on one line
+FACTS: up to 3 short facts from the knowledge separated by " ; "
+NEXT: one short suggested next move
+If TYPE is none, output only the TYPE line.`;
 
 async function handle(request: Request): Promise<Response> {
   const apiKey = process.env.GOOGLE_API_KEY ?? process.env.GEMINI_API_KEY;
@@ -78,7 +89,7 @@ async function handle(request: Request): Promise<Response> {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "anon";
   if (!rateLimit(ip)) return NextResponse.json({ error: "Too many requests, slow down." }, { status: 429 });
 
-  let body: { transcript?: unknown; ask?: unknown };
+  let body: { transcript?: unknown; ask?: unknown; stream?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -95,6 +106,8 @@ async function handle(request: Request): Promise<Response> {
     ? `The rep typed this question or situation and needs an answer to say: "${ask}"\n\nRecent call transcript (may be empty):\n${lines.join("\n")}\n\nTreat the typed text as what the business owner said. Do not return type "none".`
     : `Rolling call transcript, oldest first:\n${lines.join("\n")}`;
 
+  if (body.stream === true) return streamLines(apiKey, user);
+
   let res: Response;
   try {
     res = await fetch(
@@ -104,10 +117,10 @@ async function handle(request: Request): Promise<Response> {
         headers: { "x-goog-api-key": apiKey, "content-type": "application/json" },
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: user }] }],
-          systemInstruction: { parts: [{ text: SYSTEM }] },
+          systemInstruction: { parts: [{ text: SYSTEM + "\n\n" + OUTPUT_JSON }] },
           generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 600,
+            temperature: 0.2,
+            maxOutputTokens: 400,
             responseMimeType: "application/json",
             thinkingConfig: { thinkingBudget: 0 },
           },
@@ -138,6 +151,68 @@ async function handle(request: Request): Promise<Response> {
   }
 }
 
+/**
+ * Streaming mode: proxies Gemini's SSE stream as plain text lines
+ * (TYPE / HEARD / SAY / FACTS / NEXT) so the card fills as words arrive.
+ */
+async function streamLines(apiKey: string, user: string): Promise<Response> {
+  let up: Response;
+  try {
+    up = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:streamGenerateContent?alt=sse`,
+      {
+        method: "POST",
+        headers: { "x-goog-api-key": apiKey, "content-type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: user }] }],
+          systemInstruction: { parts: [{ text: SYSTEM + "\n\n" + OUTPUT_LINES }] },
+          generationConfig: { temperature: 0.2, maxOutputTokens: 260, thinkingConfig: { thinkingBudget: 0 } },
+        }),
+      },
+    );
+  } catch {
+    return NextResponse.json({ error: "Couldn't reach the model." }, { status: 502 });
+  }
+  if (!up.ok || !up.body) {
+    const t = await up.text().catch(() => "");
+    console.error("coach stream upstream", up.status, t.slice(0, 400));
+    return NextResponse.json({ error: "Model error, try again." }, { status: 502 });
+  }
+  const reader = up.body.getReader();
+  const dec = new TextDecoder();
+  const enc = new TextEncoder();
+  const out = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      let buf = "";
+      try {
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let i: number;
+          while ((i = buf.indexOf("\n")) >= 0) {
+            const line = buf.slice(0, i).trim();
+            buf = buf.slice(i + 1);
+            if (!line.startsWith("data:")) continue;
+            try {
+              const j = JSON.parse(line.slice(5)) as {
+                candidates?: { content?: { parts?: { text?: string }[] } }[];
+              };
+              const t = j.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? "";
+              if (t) controller.enqueue(enc.encode(t));
+            } catch {}
+          }
+        }
+      } finally {
+        controller.close();
+      }
+    },
+  });
+  return new Response(out, {
+    headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
+  });
+}
+
 // GET /api/coach?ask=... : quick manual check.
 export async function GET(request: Request) {
   const u = new URL(request.url);
@@ -148,6 +223,7 @@ export async function GET(request: Request) {
       body: JSON.stringify({
         ask: u.searchParams.get("ask") ?? "",
         transcript: (u.searchParams.get("t") ?? "").split("|").filter(Boolean),
+        stream: u.searchParams.get("stream") === "1",
       }),
     }),
   );
