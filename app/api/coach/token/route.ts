@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { websageOriginAllowed } from "@/lib/websage-origins";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,17 +17,7 @@ export const dynamic = "force-dynamic";
 const HITS: Map<string, number[]> = new Map();
 
 function allowed(origin: string): boolean {
-  try {
-    const host = new URL(origin).hostname;
-    return (
-      host === "websage-demos.vercel.app" ||
-      host === "websageinc.com" ||
-      host.endsWith(".websageinc.com") ||
-      host === "localhost"
-    );
-  } catch {
-    return false;
-  }
+  return websageOriginAllowed(origin);
 }
 
 function cors(request: Request): Record<string, string> {
@@ -35,7 +26,7 @@ function cors(request: Request): Record<string, string> {
     ? {
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "content-type",
+        "Access-Control-Allow-Headers": "content-type, authorization",
         Vary: "Origin",
       }
     : {};
