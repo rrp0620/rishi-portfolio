@@ -64,6 +64,20 @@ OUTPUT: one JSON object, nothing else:
 {"answer": "<reply to the customer>", "handoff": <true|false>}`;
 }
 
+// GET /api/demo?slug=..&q=.. : quick single-question check (same limits).
+export async function GET(request: Request) {
+  const u = new URL(request.url);
+  const fake = new Request(request.url, {
+    method: "POST",
+    headers: request.headers,
+    body: JSON.stringify({
+      slug: u.searchParams.get("slug"),
+      messages: [{ role: "user", content: u.searchParams.get("q") ?? "" }],
+    }),
+  });
+  return POST(fake);
+}
+
 export async function POST(request: Request) {
   const apiKey = process.env.GOOGLE_API_KEY ?? process.env.GEMINI_API_KEY;
   if (!apiKey) {

@@ -19,6 +19,14 @@ export async function generateMetadata({
     title: `AI assistant demo for ${bot.name}`,
     description: `A live AI support assistant trained on ${bot.name}'s website. Built by Websage.`,
     robots: { index: false, follow: false },
+    openGraph: {
+      title: `Live AI assistant for ${bot.name}`,
+      description: `Try the assistant trained on ${bot.name}'s website. Built by Websage.`,
+    },
+    twitter: {
+      title: `Live AI assistant for ${bot.name}`,
+      description: `Try the assistant trained on ${bot.name}'s website. Built by Websage.`,
+    },
   };
 }
 
@@ -46,7 +54,7 @@ export default async function DemoPage({
             Your website, answering customers 24/7.
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-black/70">
-            This assistant already read {host} and answers the questions your team gets asked
+            This assistant already read {host}{" "}and answers the questions your team gets asked
             every day: prices, hours, policies, booking. When it can&apos;t answer, or someone
             wants a person, it collects their info and hands it to your team.
           </p>
