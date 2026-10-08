@@ -5,6 +5,29 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
+// Pages live on websageinc.com/demo/* (websageinc-site repo); this route is
+// only the chat backend, so allow those origins (plus Netlify previews).
+function corsHeaders(request: Request): Record<string, string> {
+  const origin = request.headers.get("origin") ?? "";
+  let ok = false;
+  try {
+    const host = new URL(origin).hostname;
+    ok = host === "websageinc.com" || host.endsWith(".websageinc.com") || host.endsWith(".netlify.app") || host === "localhost";
+  } catch {}
+  return ok
+    ? {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type",
+        Vary: "Origin",
+      }
+    : {};
+}
+
+export function OPTIONS(request: Request) {
+  return new Response(null, { status: 204, headers: corsHeaders(request) });
+}
+
 /**
  * Client demo support bots (Websage). Same stuffed-context Gemini pattern
  * as /api/ask, but the bot speaks as the business's assistant, answers
@@ -75,10 +98,10 @@ export async function GET(request: Request) {
       messages: [{ role: "user", content: u.searchParams.get("q") ?? "" }],
     }),
   });
-  return POST(fake);
+  return handle(fake);
 }
 
-export async function POST(request: Request) {
+async function handle(request: Request): Promise<Response> {
   const apiKey = process.env.GOOGLE_API_KEY ?? process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Demo isn't configured." }, { status: 503 });
@@ -173,4 +196,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No answer came back. Try rephrasing." }, { status: 502 });
   }
   return NextResponse.json({ answer: parsed.answer, handoff: parsed.handoff === true });
+}
+
+export async function POST(request: Request) {
+  const res = await handle(request);
+  for (const [k, v] of Object.entries(corsHeaders(request))) res.headers.set(k, v);
+  return res;
 }

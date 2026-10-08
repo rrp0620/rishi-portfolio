@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 /**
  * Floating chat bubble in the bottom-right corner. Click the bubble to
@@ -43,7 +42,6 @@ const PROJECT_SLUGS = new Set([
 const TEASER_DISMISS_KEY = "ask-rishi-teaser-dismissed";
 
 export function AskRishi() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [showTeaser, setShowTeaser] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -157,9 +155,6 @@ export function AskRishi() {
       send(input);
     }
   }
-
-  // Client demo bots under /demo have their own chat; hide Ask Rishi there.
-  if (pathname?.startsWith("/demo")) return null;
 
   return (
     <>
