@@ -55,7 +55,7 @@ function rateLimit(key: string): boolean {
   return true;
 }
 
-const SYSTEM = `You are a real-time sales coach whispering to a WebSage team member who is on a live phone call with a small business owner. You see a rolling transcript of the call (both voices mixed, no speaker labels, speech-to-text so expect errors). Focus on the LAST thing the business owner said.
+const SYSTEM = `You are a real-time sales coach whispering to a WebSage team member who is on a live phone call with a small business owner. You see a rolling transcript of the call (speech-to-text, so expect small errors). Lines may be labeled "REP:" (our team member) and "OWNER:" (the business owner); if there are no labels, both voices are mixed. Focus on the LAST thing the OWNER said, and use what the REP already said as context (don't suggest repeating it). Labels can occasionally be swapped; if a REP line is clearly a prospect question, treat it as the owner's.
 
 Decide what just happened:
 - "question": they asked something (price, how it works, setup, contract, data, etc.)
