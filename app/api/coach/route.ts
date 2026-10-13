@@ -82,7 +82,7 @@ async function handle(request: Request): Promise<Response> {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "anon";
   if (!rateLimit(ip)) return NextResponse.json({ error: "Too many requests, slow down." }, { status: 429 });
 
-  let body: { transcript?: unknown; ask?: unknown; stream?: unknown };
+  let body: { transcript?: unknown; ask?: unknown; stream?: unknown; context?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -95,9 +95,10 @@ async function handle(request: Request): Promise<Response> {
   const ask = typeof body.ask === "string" ? body.ask.trim().slice(0, 600) : "";
   if (!lines.length && !ask) return NextResponse.json({ error: "Nothing to coach yet." }, { status: 400 });
 
-  const user = ask
+  const context = typeof body.context === "string" ? body.context.trim().slice(0, 1500) : "";
+  const user = (context ? `CALL CONTEXT (who we're calling and what we prepared): ${context}\n\n` : "") + (ask
     ? `The rep typed this question or situation and needs an answer to say: "${ask}"\n\nRecent call transcript (may be empty):\n${lines.join("\n")}\n\nTreat the typed text as what the business owner said. Do not return type "none".`
-    : `Rolling call transcript, oldest first:\n${lines.join("\n")}`;
+    : `Rolling call transcript, oldest first:\n${lines.join("\n")}`);
 
   if (body.stream === true) return streamLines(apiKey, user);
 
