@@ -51,11 +51,16 @@ async function isMember(token: string): Promise<boolean> {
   }
 }
 
-const SYSTEM = `You write call prep for Nicole, the salesperson at WebSage (a small AI automation and web studio). She is warm, great with people, and NOT technical. She is about to call a local business owner. Give her everything she needs on one screen: what to offer, exactly what to say, what they'll ask, and how to answer. Use plain, spoken language she can say out loud. Short sentences that still sound human, never robotic. No em dashes anywhere. No jargon. No hype.
+// The caller is the prospect's owner (Rishi or Nicole). Rishi is the builder, so his
+// script says "let me check on that" instead of "let me confirm with Rishi".
+const SYSTEM = (rep: string) => {
+  const isRishi = /^rishi\b/i.test(rep);
+  const confirm = isRishi ? "let me check on that and get back to you" : "let me confirm with Rishi";
+  return `You write call prep for ${rep}, who is making this call for WebSage (a small AI automation and web studio). ${isRishi ? "Rishi is the founder and builds everything; keep his script plain and friendly, not technical." : `${rep} is warm, great with people, and NOT technical.`} They are about to call a local business owner. Give them everything they need on one screen: what to offer, exactly what to say, what they'll ask, and how to answer. Use plain, spoken language they can say out loud. The caller introduces themself by name (${rep}) and signs everything as ${rep}. Short sentences that still sound human, never robotic. No em dashes anywhere. No jargon. No hype.
 
 Hard rules:
-- Use only the facts given about the prospect plus the WebSage knowledge below. Never invent facts about the business (reviews, prices, hours, staff, numbers). If a fact is missing, write around it or tell her to ask.
-- Prices only from the knowledge below. Never discount below list; anything else is "let me confirm with Rishi".
+- Use only the facts given about the prospect plus the WebSage knowledge below. Never invent facts about the business (reviews, prices, hours, staff, numbers). If a fact is missing, write around it or tell them to ask.
+- Prices only from the knowledge below. Never discount below list; anything else is "${confirm}".
 - Never claim clients, case studies or results. We have none yet besides our own businesses.
 - Money math: use their own numbers if given, otherwise conservative low-end assumptions and say they're assumptions. Never promise results.
 - Pick the single best-fit offer for this business (not always the chatbot). If they have a demo site/bot, the call is built around showing it. A spec website prospect gets the website offer; a chatbot demo gets the assistant offer; add at most one natural add-on.
@@ -68,18 +73,19 @@ ${COACH_KB}
 OUTPUT: one JSON object only, no markdown:
 {"offer":"the offer + price in one line, e.g. 'Website, Growth plan: $500 setup + $199/mo'",
  "why_them":"1-2 sentences: why this business, why now (from the facts)",
- "opener":"first 2-3 sentences Nicole says, using the contact's first name if known",
+ "opener":"first 2-3 sentences ${rep} says, using the contact's first name if known",
  "hook":"2-3 sentences explaining what we built for them and why it matters to them",
  "demo_steps":["3-4 short steps for walking them through the demo or site while on the phone"],
  "number_one_question":"the one question their customers ask most, to try live (use the given one if present)",
- "money_math":{"line":"one sentence she can say","assumptions":"the assumptions, short"},
- "their_questions":[{"q":"a question this owner will likely ask","a":"a short honest answer she can say"}] (5-7 items, include capability questions),
+ "money_math":{"line":"one sentence ${rep} can say","assumptions":"the assumptions, short"},
+ "their_questions":[{"q":"a question this owner will likely ask","a":"a short honest answer ${rep} can say"}] (5-7 items, include capability questions),
  "objections":[{"they":"likely objection","you":"short answer"}] (3-4 items, specific to this business),
  "close":"the close, 2 sentences, ending with a specific next step",
  "voicemail":"a 20-second voicemail with the phone (302) 344-2033",
- "follow_up":{"subject":"email subject","body":"short follow-up email signed Nicole, WebSage, with the demo link if there is one"},
+ "follow_up":{"subject":"email subject","body":"short follow-up email signed ${rep}, WebSage, with the demo link if there is one"},
  "send_after":["links to send after the call: their demo link if any, plus the matching websageinc.com/services page"],
- "watch_outs":["anything she must not say or must check first, e.g. missing phone, unconfirmed price"]}`;
+ "watch_outs":["anything the caller must not say or must check first, e.g. missing phone, unconfirmed price"]}`;
+};
 
 type P = Record<string, unknown>;
 const s = (v: unknown, n = 600) => (typeof v === "string" ? v.trim().slice(0, n) : "");
@@ -134,7 +140,7 @@ export async function POST(request: Request) {
         headers: { "x-goog-api-key": apiKey, "content-type": "application/json" },
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: user }] }],
-          systemInstruction: { parts: [{ text: SYSTEM }] },
+          systemInstruction: { parts: [{ text: SYSTEM(rep) }] },
           generationConfig: {
             temperature: 0.4,
             maxOutputTokens: 4000,
