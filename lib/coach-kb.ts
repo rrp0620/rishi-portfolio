@@ -1,7 +1,7 @@
 /**
  * Knowledge the WebSage Call Coach, the post-call review and the call-prep generator answer from.
- * Source of truth for prices: websageinc.com/pricing.html and the "Offers and Pricing" doc in Drive.
- * Keep this in sync with both (last synced 2026-10-13, after the new website launch).
+ * Source of truth: the "WebSage Source of Truth" doc (Claude Project + Drive copy). Public list prices: websageinc.com/pricing.
+ * Keep this in sync with it (last synced 2026-10-15: terms, discounts, $500 one-time site, home services).
  */
 export const COACH_KB = `
 COMPANY: WebSage Inc., a small AI automation and web studio in Middletown, Delaware. Builder: Rishi. Client lead: Nicole. Phone (302) 344-2033. Email info@websageinc.com. Website websageinc.com (prices at websageinc.com/pricing.html, one page per service at websageinc.com/services/). Show, don't tell: we build a demo, spec site or mini audit before the call. Money math on everything, using the low end and labeled assumptions. Never promise results.
@@ -9,7 +9,7 @@ COMPANY: WebSage Inc., a small AI automation and web studio in Middletown, Delaw
 PRICES (list prices, from the website):
 - AI support assistant (website chatbot): founding (first 3 clients) $500 setup + $199/mo, setup refunded if it doesn't pull its weight in 30 days. Standard $1,500 to $2,500 setup + $300 to $500/mo.
 - AI automations: Simple $250 to $750 (one trigger, one action, up to 2 apps). Focused $750 to $2,500 (one full process). Connected from $2,500 (multiple apps, record matching, reports).
-- Websites: own it outright $990 single page, $2,500 multi-page with booking, $5,000 custom. Or $500 setup + monthly: Essentials $99 (hosting, fixes, 2 edits a month, Google Business Profile setup), Growth $199 (most popular: unlimited edits + monthly lead report), Local Domination $299 (Growth + review engine + SEO push).
+- Websites: own it outright $990 single page, $2,500 multi-page with booking, $5,000 custom. Or $500 setup + monthly: Essentials $99 (hosting, fixes, 2 edits a month, Google Business Profile setup), Growth $199 (most popular: unlimited edits + monthly lead report), Local Domination $299 (Growth + review engine + SEO push). Working price for a site with no monthly plan: $500 one-time (not on the website; the caller can offer it without asking). If they want a website AND reviews, pitch Local Domination ($500 setup + $299/mo, review engine included) instead of Growth + review engine add-on ($1,000 setup + $298/mo).
 - Review engine: $500 setup + $99/mo (also included in Local Domination).
 - AI visibility audit: $499 one-time; monitoring and fixes $250/mo; audit credited if monitoring starts within 30 days.
 - AI receptionist / missed-call capture: custom quote (we have quoted $500 + $297/mo; confirm with Rishi).
@@ -17,7 +17,13 @@ PRICES (list prices, from the website):
 - Online ordering / DoorDash setup: custom quote on the site; on the call DoorDash Launch is $485, intro $199, Launch Plus with photos and launch promo $297.
 - AI consulting for bigger teams: diagnostic from $1,500, then monthly from $2,000.
 - Custom software: Rishi scopes and quotes.
-- Bundles: built on the call, "bundle two or more and save". Never quote bundle prices or discounts below list; say "let me confirm with Rishi".
+- Bundles and discounts: built on the call, "bundle two or more and save". Allowed without asking: waive the $500 setup when they bundle (promo code BUNDLESETUP), and a $500 one-time website with no plan. Anything else below list (example: a $350 site) is "let me confirm with Rishi". Never invent promos or deadlines.
+
+TERMS (say these plainly, they are locked in):
+- No contract, no minimum, no cancellation fee. Month to month. Cancel any time by email.
+- If they cancel, service runs through the end of the month they already paid for, we finish any requests they sent that month, and they are not charged again. They keep their domain and all their content.
+- Payment: they sign a short agreement, then pay by a secure Stripe link (card or bank). Monthly plans charge the setup plus the first month at signing, then bill monthly.
+- Edits: done within 2 business days. Website launch: usually within one to two weeks of getting their content.
 
 WHAT EACH SERVICE CAN AND CAN'T DO (answer capability questions from this; when it's not here, say you'll confirm with Rishi):
 
@@ -72,8 +78,8 @@ Shopify: store setup for Instagram/Facebook sellers plus an email list so they o
 GENERAL ANSWERS:
 - "Will it work with my software/website?" Websites: yes, a snippet on almost any site (Wix, Squarespace, WordPress, Shopify, custom). Other apps: usually, if the app has an integration; Rishi checks before we promise.
 - "Who owns it?" They own their domain, their data, their accounts (DoorDash, Google). We host and maintain what we build on monthly plans.
-- "Contract?" Month to month after setup unless Rishi agrees otherwise.
-- "How fast?" Usually live within a week of payment for the assistant and websites; automations depend on scope.
+- "Contract?" "No contract. It's month to month, cancel any time, no cancellation fee. If you stop, you're covered through the month you already paid."
+- "How fast?" Assistant: usually live within a week of payment. Websites: usually within one to two weeks of getting their content (faster when we already built the spec site). Automations depend on scope.
 - "What if your AI company raises prices?" That's on us; their price stays the same.
 
 VALUE MATH: front desk time costs $15-$20/hour; 10 hours/week of repeat questions is about $600-$800/month. One saved booking (party $350, wedding $6,500, a lease, a membership, a $500 repair) can pay for the year. Use the low end, label assumptions, never promise a number of bookings.
@@ -92,6 +98,8 @@ OBJECTIONS:
 - "Can you only ask my happy customers for reviews?": Google doesn't allow that and it gets profiles flagged; we ask everyone the same way and you hear about every review right away so you can reply.
 
 CLOSE: "If you like it we can put it on your real website this week. Founding clients are $500 setup and $199 a month, with a monthly report, and if it doesn't pull its weight in 30 days we refund the setup." Always end with a yes, a no, or a specific follow-up date and time.
+
+WHO TO PITCH WHAT: home services (plumbers, HVAC, roofers, landscapers, contractors) are a target. Pitch them websites, the review engine and speed-to-lead follow-up, not the chatbot.
 
 CLIENTS AND PROOF: we have no paying support-assistant clients yet. Never claim clients, case studies, results, or numbers of businesses served. If asked about other clients: "You'd be one of our first, which is exactly why we're offering founding pricing. We also run this on our own local businesses." Prospects we built demos for are NOT clients and are never mentioned to other businesses.
 
