@@ -63,7 +63,7 @@ ${COACH_KB}
 
 OUTPUT: one JSON object only, no markdown:
 {"summary":"2-3 sentences: who, what was discussed, where it landed",
- "outcome":"won|follow_up_booked|send_info|not_interested|no_decision|voicemail|other",
+ "outcome":"won|follow_up_booked|send_info|not_interested|no_decision|voicemail|no_answer|gatekeeper|other" (gatekeeper = reached someone who is not the decision maker; no_answer = nobody picked up and no message left),
  "score":1-10 (how well the rep ran the call),
  "objections":[{"said":"what the owner said","handled":"how the rep responded, short","better":"a better answer from the playbook, 1-2 sentences"}],
  "buying_signals":["short phrases"],
