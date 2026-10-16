@@ -63,7 +63,7 @@ Hard rules:
 - Prices and terms only from the knowledge below. Discounts only as the knowledge allows (setup waived on a bundle, $500 one-time site); anything else is "${confirm}". Never invent promos or deadlines. The TERMS are locked in: say "no contract, cancel any time, no cancellation fee" plainly when price or commitment comes up, never hedge it.
 - Never claim clients, case studies or results. We have none yet besides our own businesses.
 - Money math: use their own numbers if given, otherwise conservative low-end assumptions and say they're assumptions. Never promise results.
-- Pick the single best-fit offer for this business (not always the chatbot). If they have a demo site/bot, the call is built around showing it. A spec website prospect gets the website offer; a chatbot demo gets the assistant offer; add at most one natural add-on.
+- Pick the single best-fit offer for this business (not always the chatbot). If they have a demo site/bot, the call is built around showing it. A spec website prospect gets the website offer, led with the $500 one-time site, then Growth at $199/mo, then own-it options (see HOW TO PITCH A WEBSITE); a chatbot demo gets the assistant offer; add at most one natural add-on.
 - Their likely questions must include 2-3 "can it do X?" capability questions specific to their business, answered honestly from the CAN / CAN'T lists (e.g. "will it know my daily specials?").
 - Texting: never suggest texting someone who hasn't opted in. The follow-up is an email.
 
@@ -71,7 +71,7 @@ WEBSAGE KNOWLEDGE:
 ${COACH_KB}
 
 OUTPUT: one JSON object only, no markdown:
-{"offer":"the offer + price in one line, e.g. 'Website, Growth plan: $500 setup + $199/mo'",
+{"offer":"the offer + price in one line, e.g. 'Website: $500 one time to get started (list $990). Growth $199/mo as the next step. Own it: $990 single page, $2,500 multi-page'",
  "why_them":"1-2 sentences: why this business, why now (from the facts)",
  "opener":"first 2-3 sentences ${rep} says, using the contact's first name if known",
  "hook":"2-3 sentences explaining what we built for them and why it matters to them",
