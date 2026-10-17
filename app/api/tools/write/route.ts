@@ -16,7 +16,7 @@ export function OPTIONS(request: Request) {
   return preflight(request);
 }
 
-const STYLE = `Write like a real owner of a business, not like AI. Plain, warm, specific. Short sentences.
+const STYLE = `Write like a real owner of a business, not like AI. Plain, warm, specific. Short sentences. Use contractions (we're, don't, it's) like people do when they talk.
 Never use em dashes or en dashes. Never use these words: delighted, thrilled, elevate, seamless, journey, valued customer, we strive, rest assured, top-notch.
 No hashtags, no emoji.`;
 

@@ -12,7 +12,7 @@ export const maxDuration = 60;
  * Reads the live homepage and runs Google PageSpeed Insights (mobile) in parallel.
  */
 
-type Status = "pass" | "warn" | "fail";
+type Status = "pass" | "warn" | "fail" | "skip";
 type Check = { id: string; group: string; label: string; status: Status; detail: string; fix: string; weight: number };
 
 export function OPTIONS(request: Request) {
@@ -33,7 +33,10 @@ async function pageSpeed(url: string): Promise<Psi | null> {
     const t = setTimeout(() => ctl.abort(), 48_000);
     try {
       const r = await fetch(`${base}?${p}`, { signal: ctl.signal });
-      if (!r.ok) return { status: r.status, data: null };
+      if (!r.ok) {
+        console.error("psi", withKey ? "key" : "nokey", r.status, (await r.text().catch(() => "")).slice(0, 300));
+        return { status: r.status, data: null };
+      }
       return { status: 200, data: (await r.json()) as Record<string, unknown> };
     } catch {
       return { status: 504, data: null };
@@ -42,7 +45,7 @@ async function pageSpeed(url: string): Promise<Psi | null> {
     }
   };
   let r = await attempt(true);
-  if (!r.data && (r.status === 400 || r.status === 403)) r = await attempt(false);
+  if (!r.data && r.status !== 504) r = await attempt(false);
   const lh = (r.data?.lighthouseResult ?? null) as
     | { categories?: Record<string, { score?: number | null }>; audits?: Record<string, { displayValue?: string; details?: { data?: string } }> }
     | null;
@@ -129,7 +132,26 @@ export async function POST(request: Request) {
   const links = hrefs(html, page.finalUrl);
   const lower = html.toLowerCase();
   const checks: Check[] = [];
-  const add = (c: Check) => checks.push(c);
+  // Sites built as JavaScript apps send an almost empty page and fill it in the
+  // browser. We can't see what loads later, so we don't fail them for missing
+  // things; we flag the real issue instead (AI tools read the raw page).
+  const visible = stripTags(html.replace(/<(script|style|noscript|template)\b[\s\S]*?<\/\1>/gi, " "));
+  const scripts = (html.match(/<script\b[^>]*src=/gi) || []).length;
+  const jsApp = visible.length < 600 && (scripts > 0 || /id=["'](root|app|__next|__nuxt)["']/i.test(html));
+  const SKIPPABLE = new Set(["tel", "contact", "reviews", "social", "fresh", "alt", "h1", "share", "icon"]);
+  const add = (c: Check) => {
+    if (jsApp && SKIPPABLE.has(c.id) && c.status !== "pass") {
+      c = { ...c, status: "skip", detail: "Your site loads this part with JavaScript, so we couldn't check it from outside. Open your site on your phone to check it yourself.", fix: "" };
+    }
+    checks.push(c);
+  };
+  if (jsApp) {
+    checks.push({
+      id: "readable", group: "Google", label: "Readable by AI tools and search crawlers", weight: 10, status: "fail",
+      detail: `Your site's words only show up after JavaScript runs in a browser. Before that, the page has about ${visible.split(/\s+/).filter(Boolean).length} words. Google can usually work it out, but many AI tools like ChatGPT and Perplexity read the page before JavaScript runs, so to them your site is nearly blank.`,
+      fix: "Have your developer turn on server side rendering or prerendering so the full page is sent right away.",
+    });
+  }
 
   // Trust and basics
   const https = final.protocol === "https:";
@@ -244,7 +266,7 @@ export async function POST(request: Request) {
   const altPct = imgs.length ? Math.round((withAlt / imgs.length) * 100) : 100;
   add({
     id: "alt", group: "Google", label: "Photos are described", weight: 3,
-    status: altPct >= 80 ? "pass" : altPct >= 40 ? "warn" : "fail",
+    status: !imgs.length && jsApp ? "warn" : altPct >= 80 ? "pass" : altPct >= 40 ? "warn" : "fail",
     detail: imgs.length ? `${withAlt} of ${imgs.length} images have descriptions (alt text).` : "No images on the homepage to check.",
     fix: "Give each photo a short description of what's in it. Helps Google and people using screen readers.",
   });
@@ -272,17 +294,20 @@ export async function POST(request: Request) {
   } else {
     add({
       id: "speed", group: "Speed", label: "Speed", weight: 12,
-      status: firstByte < 1500 ? "pass" : firstByte < 3500 ? "warn" : "fail",
-      detail: `Your homepage answered in ${(firstByte / 1000).toFixed(1)} seconds (${kb} KB of page code).${firstByte >= 3500 ? " That's slow. People leave." : ""}`,
+      status: jsApp ? "skip" : firstByte < 1500 ? "pass" : firstByte < 3500 ? "warn" : "fail",
+      detail: jsApp
+        ? "Your site finishes loading in the browser, so we couldn't time it from here. Google's speed test was busy. Try again in a few minutes for a full speed score."
+        : `Your homepage answered in ${(firstByte / 1000).toFixed(1)} seconds (${kb} KB of page code).${firstByte >= 3500 ? " That's slow. People leave." : ""}`,
       fix: "Compress big photos, cut extra plugins and scripts, and use good hosting.",
     });
   }
 
+  const scored = checks.filter((c) => c.status !== "skip");
   const score = Math.round(
-    (checks.reduce((s, c) => s + c.weight * (c.status === "pass" ? 1 : c.status === "warn" ? 0.5 : 0), 0) /
-      checks.reduce((s, c) => s + c.weight, 0)) * 100,
+    (scored.reduce((s, c) => s + c.weight * (c.status === "pass" ? 1 : c.status === "warn" ? 0.5 : 0), 0) /
+      scored.reduce((s, c) => s + c.weight, 0)) * 100,
   );
-  const order: Record<Status, number> = { fail: 0, warn: 1, pass: 2 };
+  const order: Record<Status, number> = { fail: 0, warn: 1, pass: 2, skip: 3 };
   checks.sort((a, b) => order[a.status] - order[b.status] || b.weight - a.weight);
 
   return json(request, {
@@ -295,7 +320,9 @@ export async function POST(request: Request) {
       pass: checks.filter((c) => c.status === "pass").length,
       warn: checks.filter((c) => c.status === "warn").length,
       fail: checks.filter((c) => c.status === "fail").length,
+      skip: checks.filter((c) => c.status === "skip").length,
     },
+    jsApp,
     checks: checks.map((c) => ({ id: c.id, group: c.group, label: c.label, status: c.status, detail: c.detail, fix: c.fix })),
     speed: psi ? { performance: psi.performance, seo: psi.seo, accessibility: psi.accessibility, lcp: psi.lcp } : null,
     screenshot: psi?.screenshot || null,
