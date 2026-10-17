@@ -27,7 +27,7 @@ async function pageSpeed(url: string): Promise<Psi | null> {
   for (const c of ["performance", "seo", "accessibility"]) q.append("category", c);
   const attempt = async (withKey: boolean) => {
     const p = new URLSearchParams(q);
-    const key = apiKey();
+    const key = process.env.PAGESPEED_API_KEY ?? apiKey(); // a key with the PageSpeed Insights API allowed
     if (withKey && key) p.set("key", key);
     const ctl = new AbortController();
     const t = setTimeout(() => ctl.abort(), 48_000);
