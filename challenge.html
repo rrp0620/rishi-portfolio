@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Content Made Easy: AI Edition | 7-Day Live Challenge with Asia-Miree Thorpe</title>
+<meta name="description" content="A 7-day live challenge inside a private Facebook group. Walk away with the AI Content Blueprint Workbook and a content strategy AI can finally get right. $47.">
+<meta property="og:title" content="Content Made Easy: AI Edition">
+<meta property="og:description" content="For founders and entrepreneurs who want AI to finally sound like them. $47, 7 days live.">
+<meta property="og:image" content="/img/workbook.jpg">
+<link rel="icon" href="/img/mark.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+.ticker{background:var(--black);color:#d8d8d8;overflow:hidden;white-space:nowrap;padding:12px 0}
+.ticker div{display:inline-block;animation:tick 40s linear infinite}
+.ticker span{margin:0 22px;font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.ticker span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-right:22px;vertical-align:middle}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker div{animation:none}}
+
+/* hero */
+.chero{background:linear-gradient(90deg,var(--black) 0 9%,var(--off) 9% 100%);text-align:center}
+.chero .wrap{max-width:980px;padding-top:70px;padding-bottom:90px}
+.brand{font-family:var(--script);font-size:64px;line-height:1;color:var(--black)}
+.brand span{color:var(--tan)}
+.byline{color:var(--teal);margin-top:8px}
+.pill{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:12px 26px;margin-top:30px;font-size:16px}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.chero h1{font-style:italic;font-weight:900;font-size:clamp(38px,5.6vw,70px);margin-top:34px;line-height:1.08}
+.chero h1 em{display:block}
+.offer{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:44px;flex-wrap:wrap}
+.offer img{width:340px;max-width:100%;border:1px solid var(--line);background:#fff}
+.badge{width:140px;height:140px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;line-height:1;box-shadow:0 14px 30px rgba(58,175,169,.35)}
+.badge span{display:block;font-size:13px;letter-spacing:.3em;margin-bottom:6px}
+.badge b{font-family:var(--serif);font-size:50px}
+.chero .intro{font-size:21px;max-width:720px;margin:40px auto 0;color:var(--ink)}
+.chero .btn{margin-top:34px;padding:22px 44px}
+
+/* difference */
+.diff{background:var(--tan);text-align:center}
+.diff h2{max-width:760px;margin:0 auto}
+.diff .label{color:#fff}
+.cols{display:grid;grid-template-columns:1fr auto 1fr;gap:26px;margin-top:54px;text-align:left;align-items:stretch}
+.card{background:#fff;padding:34px 30px}
+.card .caps{color:var(--muted)}
+.card.with .caps{color:var(--teal)}
+.card ul{list-style:none;margin-top:20px}
+.card li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
+.card.without li::before{content:"✕";color:#999}
+.card.with li{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+.card.with li::before{content:"";flex:none;width:8px;height:8px;margin-top:8px;border-radius:50%;background:var(--teal)}
+.card .end{margin-top:22px;font-style:italic;color:var(--muted)}
+.vs{align-self:center;width:56px;height:56px;border-radius:50%;border:1.5px solid #fff;color:#fff;display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-size:20px}
+
+/* familiar */
+.fam{background:var(--black);color:#ddd}
+.fam h2{color:#fff}
+.fam .row{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:28px 0;border-top:1px solid #2a2a2a;font-size:19px}
+.fam .row b{color:var(--teal);font-weight:600}
+.fam .tag{font-family:var(--serif);font-style:italic;font-size:30px;color:var(--tan);margin-top:34px}
+
+/* included */
+.inc .grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.inc ul{list-style:none;margin-top:26px}
+.inc li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;gap:14px}
+.inc li::before{content:"✓";color:var(--teal);font-weight:600}
+.inc .built{margin-top:26px;color:var(--teal)}
+
+/* shift */
+.shift{background:var(--white)}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
+.s{border:1px solid var(--line);padding:30px 26px;background:var(--off)}
+.s .from{color:#8b8b8b;text-decoration:line-through;text-decoration-color:var(--tan)}
+.s h3{font-size:22px;margin-top:12px}
+.s p{color:var(--muted);margin-top:10px;font-size:16px}
+
+/* steps */
+.steps{background:var(--tan-l)}
+.stgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
+.st{background:#fff;padding:34px 28px;text-align:center}
+.st .n{width:54px;height:54px;border-radius:50%;background:var(--black);color:#fff;display:grid;place-items:center;margin:0 auto;font-family:var(--serif);font-size:22px}
+.st h3{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.2em;text-transform:uppercase;margin-top:20px}
+.st p{color:var(--muted);margin-top:10px;font-size:16px}
+
+/* story */
+.story .grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:center}
+.story img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.story .script{font-size:40px;color:var(--tan)}
+.story p{margin-top:16px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+.stats div{border-top:2px solid var(--black);padding-top:12px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stats b{display:block;font-family:var(--serif);font-size:38px;color:var(--black);letter-spacing:0}
+
+/* what you get */
+.get{background:var(--black);color:#ddd}
+.get h2{color:#fff}
+.gitem{display:grid;grid-template-columns:140px 1fr auto;gap:26px;padding:30px 0;border-top:1px solid #2a2a2a;align-items:baseline}
+.gitem .ord{font-family:var(--script);font-size:34px;color:var(--tan)}
+.gitem h3{color:#fff;font-size:26px}
+.gitem p{margin-top:8px}
+.gitem .t{color:var(--teal)}
+
+/* voices */
+.voices{background:var(--off)}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
+.v{background:#fff;border:1px solid var(--line);padding:32px 28px}
+.v .mark{font-family:var(--serif);font-size:64px;line-height:.6;color:var(--tan)}
+.v p{margin-top:12px}
+.v footer{margin-top:20px}
+.v b{display:block;color:var(--black)}
+.v span{font-size:12px;letter-spacing:.2em;color:var(--teal);text-transform:uppercase}
+
+/* everything */
+.every{background:var(--tan)}
+.box{background:#fff;max-width:760px;margin:0 auto;padding:50px 46px;text-align:center}
+.box ul{list-style:none;text-align:left;margin:28px 0}
+.box li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
+.box li::before{content:"✓";color:var(--teal);font-weight:600}
+.box .big{font-family:var(--serif);font-size:72px;font-weight:700;color:var(--black);line-height:1}
+.box .note{color:var(--muted);margin-top:6px}
+.box .btn{margin-top:26px;width:100%}
+
+/* faq */
+.faq .wrap{max-width:860px}
+details{border-bottom:1px solid var(--line);padding:22px 0}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;font-family:var(--serif);font-weight:700;font-size:22px;color:var(--black)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--tan);font-size:28px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin-top:12px;color:var(--muted)}
+
+/* final */
+.cfinal{background:var(--black);color:#ddd;text-align:center}
+.cfinal h2{color:#fff;max-width:760px;margin:0 auto}
+.cfinal h2 em{color:var(--tan)}
+.cfinal p{max-width:600px;margin:18px auto 0}
+.cfinal .btn{margin-top:30px;padding:22px 44px}
+.cfinal small{display:block;margin-top:14px;color:#9a9a9a}
+
+@media (max-width:900px){
+  .chero{background:var(--off)}
+  .brand{font-size:50px}
+  .cols{grid-template-columns:1fr}
+  .vs{justify-self:center}
+  .fam .row{grid-template-columns:44px 1fr;font-size:17px}
+  .inc .grid,.story .grid{grid-template-columns:1fr;gap:40px}
+  .sgrid,.stgrid,.vgrid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .gitem{grid-template-columns:1fr;gap:6px}
+  .box{padding:36px 22px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">For <b>founders and entrepreneurs</b> who want AI to finally sound like them</div>
+
+<header class="site">
+  <div class="wrap hd">
+    <a class="logo" href="/"><img src="/img/mark.jpg" alt="Elevate Your Media logo" width="200" height="170"><span>Elevate Your Media<small>Digital brand marketing &amp; management</small></span></a>
+    <button class="menu" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav">
+      <a href="#inside">What's inside</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="/">Done-for-you</a>
+      <a class="btn" href="https://shop.beacons.ai/elevateyourmedianow/4fdd8624-6e67-4734-9673-bd353067f73b" target="_blank" rel="noopener">Join $47</a>
+    </nav>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true"><div>
+  <span>The AI Content Blueprint Method</span><span>Done in just 7 days</span><span>No AI experience needed</span><span>The business-first strategy</span><span>6 years as a social media manager</span><span>3 ready-to-use AI prompts</span><span>Works for any niche</span><span>Built from real client work</span><span>Business before content</span><span>Turns into a year of content</span>
+  <span>The AI Content Blueprint Method</span><span>Done in just 7 days</span><span>No AI experience needed</span><span>The business-first strategy</span><span>6 years as a social media manager</span><span>3 ready-to-use AI prompts</span><span>Works for any niche</span><span>Built from real client work</span><span>Business before content</span><span>Turns into a year of content</span>
+</div></div>
+
+<main>
+  <div class="chero">
+    <div class="wrap">
+      <div class="brand">Content Made <span>Easy</span></div>
+      <div class="byline caps">Asia-Miree Thorpe</div>
+      <div class="pill">7-Day Live Challenge Inside a Private Facebook Group</div>
+      <h1>The Founder Whose AI Content Sounds Generic <em>Finally Gets A Strategy AI Can't Get Wrong</em></h1>
+      <div class="offer">
+        <img src="/img/workbook.jpg" alt="Content Made Easy: AI Edition workbook" width="520" height="520">
+        <div class="badge"><div><span>ONLY</span><b>$47</b></div></div>
+      </div>
+      <p class="intro">You get 7 days live inside a private Facebook group, a full AI Content Blueprint Workbook, and a personal content strategy built to your business. No generic prompts. No copy and paste. Just a strategy AI can finally get right, made specifically for you.</p>
+      <a class="btn" href="https://shop.beacons.ai/elevateyourmedianow/4fdd8624-6e67-4734-9673-bd353067f73b" target="_blank" rel="noopener">Join the challenge for $47</a>
+    </div>
+  </div>
+
+  <section class="diff">
+    <div class="wrap">
+      <span class="label caps">The difference</span>
+      <h2>Without A Strategy vs With Content Made Easy</h2>
+      <div class="cols">
+        <div class="card without">
+          <div class="caps">Without a real strategy</div>
+          <ul>
+            <li>Posting whatever AI hands you</li>
+            <li>Content that sounds like everyone else's</li>
+            <li>No plan, just hoping something lands</li>
+            <li>Rewriting the same caption five times</li>
+            <li>Feeling behind every time you open the app</li>
+          </ul>
+          <p class="end">You show up sporadic, unsure, and sounding like everyone else.</p>
+        </div>
+        <div class="vs">vs</div>
+        <div class="card with">
+          <div class="caps">With Content Made Easy</div>
+          <ul>
+            <li>Content that sounds like you</li>
+            <li>A strategy AI can actually use</li>
+            <li>A plan you can batch in one sitting</li>
+            <li>Confidence in what you post</li>
+            <li>A year of content from one strategy</li>
+          </ul>
+          <p class="end">You show up on purpose, sounding exactly like you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fam">
+    <div class="wrap">
+      <span class="label caps">Sound familiar?</span>
+      <h2 style="margin-bottom:40px">If any of this sounds familiar...</h2>
+      <div class="row"><b>01</b><p>You are using AI every day, but your content still sounds like everyone else's. Since AI blew up, everybody is typing into the same box and getting back the same kind of answer.</p></div>
+      <div class="row"><b>02</b><p>You post something that looks good, a nice caption, a pretty graphic, and still nobody responds. So now you are wondering if the content is even the problem.</p></div>
+      <div class="row"><b>03</b><p>You genuinely do not know what to post next. You are not following a plan, you are just hoping today's post lands.</p></div>
+      <div class="row"><b>04</b><p>You keep making random content with no thread connecting it. One day it is a tip, the next day it is a trend, and none of it is building toward anything.</p></div>
+      <div class="row"><b>05</b><p>You let AI tell you what to say, like you do not already have your own message and your own brand. You are becoming too dependent on a tool that does not actually know your business.</p></div>
+      <div class="row"><b>06</b><p>You want to show up consistently. You really do. You just do not have a plan, so consistency keeps slipping.</p></div>
+      <div class="tag">...then this is for you!</div>
+    </div>
+  </section>
+
+  <section id="inside" class="inc">
+    <div class="wrap grid">
+      <div>
+        <span class="label caps">What is included</span>
+        <h2>Content Made Easy <em>AI Edition</em></h2>
+        <p class="sub">A 7-day live challenge that turns your business into a strategy AI can finally use right.</p>
+        <ul>
+          <li>The AI Content Blueprint Workbook, 7 sections</li>
+          <li>7 days live inside a private Facebook group</li>
+          <li>A strategy built from your own answers</li>
+          <li>3 ready-to-use AI prompt types</li>
+          <li>A posting schedule and content pillars</li>
+          <li>Bonus resources to keep you moving</li>
+        </ul>
+        <div class="built caps">Built from 6 years of real client strategy work</div>
+      </div>
+      <div>
+        <div class="card" style="border:1px solid var(--line)">
+          <div class="caps" style="color:var(--teal)">AI Content Blueprint Workbook + Strategy</div>
+          <ul style="list-style:none;margin-top:16px">
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 1: I Believe (Your Business Basics)</li>
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 2: Audience Clarity</li>
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 3: Your Unique Selling Point</li>
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 4: Brand Characteristics</li>
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 5: Your KPIs</li>
+            <li style="padding:12px 0;border-bottom:1px solid var(--line)">Section 6: Your AI-Ready Strategy</li>
+            <li style="padding:12px 0">Section 7: Your Prompts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shift">
+    <div class="wrap">
+      <div class="center">
+        <span class="label caps">The shift</span>
+        <h2>Here is what changes when you have <em>the right system in place</em></h2>
+      </div>
+      <div class="sgrid">
+        <div class="s"><div class="from">Content that sounds like everyone else</div><h3>It finally sounds like you</h3><p>Your strategy hands AI everything it needs to know about your business, your voice, and your goals. So what comes back finally sounds like you.</p></div>
+        <div class="s"><div class="from">Content that gets no response</div><h3>Posting from a plan</h3><p>You stop guessing at what to post and start posting from a plan built on your real audience, your real offer, and your real goals.</p></div>
+        <div class="s"><div class="from">Not knowing what to post</div><h3>The plan builds itself</h3><p>Your workbook walks you through 7 sections, from your business basics to your audience to your KPIs, so the plan builds itself as you answer.</p></div>
+        <div class="s"><div class="from">Random, disconnected content</div><h3>Every post ties back</h3><p>Every post ties back to your content pillars and your goals, so nothing you post is random anymore. It is all intentional.</p></div>
+        <div class="s"><div class="from">Letting AI put words in your mouth</div><h3>Your message first</h3><p>You give AI your real message and your real brand first. Then it amplifies your voice, instead of replacing it.</p></div>
+        <div class="s"><div class="from">Wanting to be consistent, but no plan</div><h3>Batch in one sitting</h3><p>You walk away with a strategy you can sit down and batch from in one sitting, instead of scrambling day to day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="steps">
+    <div class="wrap">
+      <div class="center">
+        <span class="label caps">How it works</span>
+        <h2>It only takes <em>3 steps</em></h2>
+      </div>
+      <div class="stgrid">
+        <div class="st"><div class="n">1</div><h3>Join &amp; get your workbook</h3><p>Sign up for $47 and get instant access to the private Facebook group and the AI Content Blueprint Workbook.</p></div>
+        <div class="st"><div class="n">2</div><h3>Answer 7 live sections</h3><p>Over 7 days, work through your business basics, audience, USP, brand, and KPIs, the same questions Asia uses with her own clients.</p></div>
+        <div class="st"><div class="n">3</div><h3>Walk away with your strategy</h3><p>Get a content strategy AI can actually use, plus 3 prompt types for authority, trust, and conversion posts.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="wrap grid">
+      <img src="/img/asia.jpg" alt="Asia-Miree Thorpe" width="480" height="600">
+      <div>
+        <span class="label caps">The story</span>
+        <div class="script">How this product came to exist</div>
+        <p>Hi, I am Asia. I have been a social media manager for 6 years, and this challenge is built from the exact questionnaire I use with my own paying clients. It started as a shortcut I built for myself.</p>
+        <p>I normally build strategies like this one on one with paying clients. This challenge makes that same process accessible to founders who are doing their own content and marketing, without the full client price tag.</p>
+        <div class="stats">
+          <div><b>6+</b>Years as a social media manager</div>
+          <div><b>30+</b>Client strategies built from this process</div>
+          <div><b>7</b>Days to your own AI-ready strategy</div>
+          <div><b>1</b>Strategy that powers a year of content</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="get">
+    <div class="wrap">
+      <span class="label caps">What you get</span>
+      <h2 style="margin-bottom:40px">Here is everything the Content Made Easy Challenge does</h2>
+      <div class="gitem"><span class="ord">One</span><div><h3>The AI Content Blueprint Workbook</h3><p>Seven sections that take you from your business basics, to your audience, your unique selling point, your brand, and your KPIs. Each section builds on the last, so by the end you have a full picture, not just a checklist.</p></div><span class="t caps">Workbook</span></div>
+      <div class="gitem"><span class="ord">Two</span><div><h3>A Strategy Built From Your Own Answers</h3><p>Section six turns your answers into a real strategy, with your content pillars, a posting schedule, keywords, and an optimization protocol. This is the same process Asia uses to build strategy for her paying clients.</p></div><span class="t caps">Strategy</span></div>
+      <div class="gitem"><span class="ord">Three</span><div><h3>3 Prompt Types That Actually Work</h3><p>Section seven gives you three prompts built to create authority posts, trust-building posts, and conversion posts. Feed AI your strategy and these prompts, and it finally has enough context to get it right.</p></div><span class="t caps">Prompts</span></div>
+      <div class="gitem"><span class="ord">Four</span><div><h3>7 Days, Live, Inside A Private Group</h3><p>This is not a self-paced dump of prompts. Asia leads the challenge live inside her private Facebook group, so you are building your strategy alongside other founders, not alone at your desk.</p></div><span class="t caps">Live</span></div>
+      <div class="gitem"><span class="ord">Five</span><div><h3>A Strategy That Turns Into A Year Of Content</h3><p>Once your strategy is built, you can hand it to AI anytime you need a new batch of content. No re-explaining your business every time. AI already has what it needs.</p></div><span class="t caps">Flexible</span></div>
+    </div>
+  </section>
+
+  <section class="voices">
+    <div class="wrap">
+      <div class="center">
+        <span class="label caps">Real people, real 7 days</span>
+        <h2>From inside the challenge</h2>
+      </div>
+      <div class="vgrid">
+        <figure class="v"><div class="mark">"</div><p>This challenge gave me something I didn't realize I was missing: structure. Not ideas, not content, not passion. Structure. I came into this challenge thinking about content strategy and walked away with something much deeper. I gained clarity around who I am, what I do, and why I do it.</p><footer><b>Jus Irazistable</b><span>Challenge participant</span></footer></figure>
+        <figure class="v"><div class="mark">"</div><p>The biggest transformation I experienced this week was getting a better idea of how I can stretch my content. This helped a lot. I felt stuck before. This was a game changer. My biggest content struggle was figuring out what else to post. Now I have a better sense of direction.</p><footer><b>Khalima Green</b><span>Challenge participant</span></footer></figure>
+        <figure class="v"><div class="mark">"</div><p>After completing this exercise, you have opened my eyes. I was so amazed. I am so excited about everything I've learned these past 7 days. So glad I took this challenge. Game changer.</p><footer><b>Tamika Jones</b><span>Challenge participant</span></footer></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="every">
+    <div class="wrap">
+      <div class="box">
+        <span class="label caps">Everything you get</span>
+        <h2 style="font-size:36px">The Content Made Easy Challenge: <em>AI Edition</em></h2>
+        <ul>
+          <li>The Content Made Easy Challenge, live for 7 days</li>
+          <li>The AI Content Blueprint Workbook, 7 sections</li>
+          <li>Asia's own client strategy process, step by step</li>
+          <li>3 ready-to-use AI prompt types</li>
+          <li>A strategy built from your real answers, not guesses</li>
+          <li>Bonus resources to keep your content moving</li>
+          <li>Works for any founder creating their own content</li>
+          <li>Your full strategy, ready in 7 days</li>
+        </ul>
+        <div class="big">$47</div>
+        <div class="note">One-time payment. Instant access.</div>
+        <a class="btn black" href="https://shop.beacons.ai/elevateyourmedianow/4fdd8624-6e67-4734-9673-bd353067f73b" target="_blank" rel="noopener">Join the challenge for $47</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="wrap">
+      <div class="center" style="margin-bottom:30px">
+        <span class="label caps">Questions</span>
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <details><summary>I am a complete beginner. Can I still use this?</summary><p>Yes. If this is your first time thinking through your content strategy, I built the workbook to walk you through it step by step, question by question. You do not need any AI experience or marketing background to start.</p></details>
+      <details><summary>I don't have a niche or business plan yet. Can I start anyway?</summary><p>You do not need a business plan or a clear niche walking in. I built the workbook to help you figure that out. By the time you finish section one, you will already have more clarity than when you started.</p></details>
+      <details><summary>I already tried AI for content and it did not work. Is this different?</summary><p>If you have posted a content prompt into AI and gotten something generic back, this is different. AI was not generic because it is bad, it was generic because it did not know your business. This challenge fixes that first.</p></details>
+      <details><summary>What makes this different from free prompts online?</summary><p>A lot of people are handing out prompts to copy and paste into ChatGPT. This is not that. Nothing here is surface level. You are building a full strategy, the same one I build for my paying clients, so what you feed AI actually has substance behind it.</p></details>
+      <details><summary>I already use AI for my content. What can this teach me?</summary><p>Using AI and getting it right are two different things. This challenge is not about learning a tool, it is about getting all the context about your business organized so that whenever you do use AI, it finally gets you.</p></details>
+      <details><summary>Will the output look or sound generic?</summary><p>That is the exact problem this challenge solves. Once AI has your real answers about your business, your audience, your USP, and your brand, it has no way to hand you something generic. I built the strategy to be specific to you.</p></details>
+      <details><summary>Why is this priced so accessibly?</summary><p>I normally build strategies like this one on one with paying clients. This challenge makes that same process accessible to founders who are doing their own content and marketing, without the full client price tag.</p></details>
+      <details><summary>How long does it take to get results?</summary><p>The challenge runs for 7 days. You bring honest answers about your business. By the end, you will walk away with a workbook and a strategy you can use right away, and keep using for a year of content.</p></details>
+    </div>
+  </section>
+
+  <section class="cfinal">
+    <div class="wrap">
+      <span class="label caps">Get started</span>
+      <h2>Founders like you deserve content <em>that actually sounds like you.</em></h2>
+      <p>Join the Content Made Easy Challenge: AI Edition for $47. 7 days live, one workbook, one strategy built to your business.</p>
+      <a class="btn" href="https://shop.beacons.ai/elevateyourmedianow/4fdd8624-6e67-4734-9673-bd353067f73b" target="_blank" rel="noopener">Join the challenge for $47</a>
+      <small>Instant access to the private Facebook group.</small>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="ft">
+      <div>
+        <a class="logo" href="/"><img src="/img/mark.jpg" alt="" width="200" height="170"><span>Elevate Your Media<small>Digital brand marketing &amp; management</small></span></a>
+        <p style="margin-top:18px;max-width:320px">Want it done for you instead? <a href="https://forms.gle/7RW1exHwi8E5WPd4A" target="_blank" rel="noopener" style="color:var(--tan)">Apply for done-for-you management.</a></p>
+      </div>
+      <div>
+        <h4>More from Asia</h4>
+        <ul>
+          <li><a href="/">Done-for-you management</a></li>
+          <li><a href="https://shop.beacons.ai/elevateyourmedianow/c524e36d-2430-4e29-9bbc-d944edf2a3b6" target="_blank" rel="noopener">The Content Clarity Workbook</a></li>
+          <li><a href="https://shop.beacons.ai/elevateyourmedianow/6786f626-e020-49e6-81ab-abd958721072" target="_blank" rel="noopener">The Content Clarity Vault</a></li>
+          <li><a href="https://shop.beacons.ai/elevateyourmedianow/66933dbb-e9fa-4f98-b2b4-8f23080c64bc" target="_blank" rel="noopener">The Content Clarity Kit (free)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow along</h4>
+        <ul>
+          <li><a href="https://instagram.com/elevateyourmedianow" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://tiktok.com/@asiamireetofficial" target="_blank" rel="noopener">TikTok</a></li>
+          <li><a href="https://www.linkedin.com/in/asia-miree-thorpe-9ab791172/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.youtube.com/@yourfavcontentcreator_" target="_blank" rel="noopener">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>© 2026 Elevate Your Media Now. All rights reserved.</span><span>Philadelphia, PA</span></div>
+  </div>
+</footer>
+
+<div class="mbar"><a href="#faq">Questions</a><a href="https://shop.beacons.ai/elevateyourmedianow/4fdd8624-6e67-4734-9673-bd353067f73b" target="_blank" rel="noopener">Join $47</a></div>
+
+<script>
+const mb=document.querySelector('.menu'),nv=document.getElementById('nav');
+mb.addEventListener('click',()=>{const o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+nv.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nv.classList.remove('open')));
+</script>
+</body>
+</html>
