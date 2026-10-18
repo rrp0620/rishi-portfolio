@@ -7,7 +7,8 @@ export const maxDuration = 60;
 /**
  * "Does AI recommend you?" (websageinc.com/tools/ai-check.html)
  * POST { business, trade, town } -> asks Google Gemini (with live Google Search)
- * the questions a customer would ask, then checks whether the business is named.
+ * three questions a customer would ask, checks whether the business is named,
+ * and tallies share of voice across every business AI mentioned.
  */
 
 export function OPTIONS(request: Request) {
@@ -77,9 +78,11 @@ export async function POST(request: Request) {
     return json(request, { error: "You've run a lot of checks. Give it an hour and try again." }, 429);
   }
 
+  const singular = trade.replace(/s$/i, "");
   const questions = [
     `What are the best ${trade} in ${town}? Who would you recommend?`,
-    `I need a ${trade.replace(/s$/i, "")} near ${town}. Who has great reviews and is worth calling?`,
+    `I need a ${singular} near ${town}. Who has great reviews and is worth calling?`,
+    `Who is a reliable, fairly priced ${singular} in ${town} that I can call today?`,
   ];
   const answers = await Promise.all(questions.map(ask));
   if (answers.every((a) => !a.ok)) return upstreamError(request, answers[0].status);
@@ -106,6 +109,30 @@ export async function POST(request: Request) {
   const best = valid.filter((r) => r.found).map((r) => r.position!).sort((a, b) => a - b)[0] ?? null;
   const verdict = hits === valid.length ? (best && best <= 3 ? "strong" : "listed") : hits > 0 ? "sometimes" : "missing";
 
+  // Visibility score: position-weighted average across questions (1st = 100, each spot down = -12, not named = 0)
+  const posScore = (p: number | null) => (p == null ? 0 : Math.max(20, 100 - (p - 1) * 12));
+  const score = Math.round(valid.reduce((a, r) => a + posScore(r.position), 0) / valid.length);
+
+  // Share of voice: every business named across all questions, position weighted
+  const key = (n: string) => n.toLowerCase().replace(/\b(the|inc|llc|co|corp|company|ltd)\b\.?/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const tally = new Map<string, { name: string; mentions: number; best: number; points: number }>();
+  valid.forEach((r) => {
+    r.picks.forEach((p, i) => {
+      const k = key(p.name);
+      if (!k) return;
+      const t = tally.get(k) ?? { name: p.name, mentions: 0, best: 99, points: 0 };
+      t.mentions++; t.best = Math.min(t.best, i + 1); t.points += posScore(i + 1);
+      tally.set(k, t);
+    });
+  });
+  const youKey = key(business);
+  const matchKeys = new Set(valid.filter((r) => r.found).map((r) => key(r.picks[r.position! - 1].name)));
+  const totalPoints = Array.from(tally.values()).reduce((a, t) => a + t.points, 0) || 1;
+  const competitors = Array.from(tally.entries())
+    .map(([k, t]) => ({ name: t.name, mentions: t.mentions, best: t.best, share: Math.round((t.points / totalPoints) * 100), you: k === youKey || matchKeys.has(k) }))
+    .sort((a, b) => b.share - a.share || a.best - b.best)
+    .slice(0, 10);
+
   return json(request, {
     business,
     trade,
@@ -114,6 +141,8 @@ export async function POST(request: Request) {
     found_in: hits,
     asked: valid.length,
     best_position: best,
+    score,
+    competitors,
     results: valid,
     engine: "Google Gemini with Google Search",
     checkedAt: new Date().toISOString(),
