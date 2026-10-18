@@ -241,6 +241,8 @@ export type Page = {
   html: string;
   contentType: string;
   redirects: number;
+  headers: Record<string, string>;
+  hops: string[];
 };
 
 const UA =
@@ -250,6 +252,7 @@ const UA =
 export async function fetchPage(start: URL, timeoutMs = 12_000, maxBytes = 2_500_000): Promise<Page> {
   let url = new URL(start.toString());
   const t0 = Date.now();
+  const hops: string[] = [];
   for (let hop = 0; hop <= 5; hop++) {
     if (!(await hostIsPublic(url.hostname))) throw new Error("We couldn't find that website. Check the address and try again.");
     const ctl = new AbortController();
@@ -270,10 +273,13 @@ export async function fetchPage(start: URL, timeoutMs = 12_000, maxBytes = 2_500
       clearTimeout(timer);
       const next = new URL(res.headers.get("location")!, url);
       if (next.protocol !== "http:" && next.protocol !== "https:") throw new Error("That website redirects somewhere we can't follow.");
+      hops.push(next.toString());
       url = next;
       continue;
     }
     const contentType = res.headers.get("content-type") ?? "";
+    const headers: Record<string, string> = {};
+    res.headers.forEach((v, k) => { headers[k.toLowerCase()] = v; });
     const reader = res.body?.getReader();
     const chunks: Uint8Array[] = [];
     let bytes = 0;
@@ -303,6 +309,8 @@ export async function fetchPage(start: URL, timeoutMs = 12_000, maxBytes = 2_500
       html: new TextDecoder("utf-8", { fatal: false }).decode(buf),
       contentType,
       redirects: hop,
+      headers,
+      hops,
     };
   }
   throw new Error("That website redirects too many times.");
