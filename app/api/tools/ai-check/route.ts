@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     return json(request, { error: "You've run a lot of checks. Give it an hour and try again." }, 429);
   }
 
-  const singular = trade.replace(/s$/i, "");
+  const singular = /ies$/i.test(trade) ? trade.replace(/ies$/i, "y") : /(ss|us)$/i.test(trade) ? trade : /(sh|ch|x|z|s)es$/i.test(trade) ? trade.replace(/es$/i, "") : trade.replace(/s$/i, "");
   const questions = [
     `What are the best ${trade} in ${town}? Who would you recommend?`,
     `I need a ${singular} near ${town}. Who has great reviews and is worth calling?`,
@@ -88,14 +88,33 @@ export async function POST(request: Request) {
   if (answers.every((a) => !a.ok)) return upstreamError(request, answers[0].status);
 
   const reads = await Promise.all(answers.map((a) => (a.ok ? read(a.text, business) : Promise.resolve(null))));
+  // Normalize a business name for matching: drop addresses and parentheticals, legal suffixes, punctuation
+  const tradeWords = new Set([trade, singular].join(" ").toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 2));
+  const key = (n: string) => {
+    const base = n.toLowerCase().replace(/\(.*?\)/g, " ").replace(/\d.*$/, " ").replace(/[^a-z0-9]+/g, " ").trim();
+    const k = base.split(" ").filter((w) => w && !/^(the|inc|llc|co|corp|company|ltd)$/.test(w) && !tradeWords.has(w)).join(" ");
+    return k || base;
+  };
+  const bizKey = key(business);
+  const bizWords = new Set(bizKey.split(" ").filter((w) => w.length > 2));
+  const overlaps = (k: string) => k.split(" ").some((w) => w.length > 2 && bizWords.has(w));
+  const matchIndex = (r: Read): number => {
+    const byName = r.match_name ? r.picks.findIndex((p) => key(p.name) === key(r.match_name)) : -1;
+    if (byName >= 0 && overlaps(key(r.picks[byName].name))) return byName;
+    const exact = r.picks.findIndex((p) => key(p.name) === bizKey);
+    if (exact >= 0) return exact;
+    if (r.match_index >= 0 && r.match_index < r.picks.length && overlaps(key(r.picks[r.match_index].name))) return r.match_index;
+    return -1;
+  };
   const results = questions.map((q, i) => {
     const r = reads[i];
-    const found = r ? r.match_index >= 0 && r.match_index < r.picks.length : false;
+    const idx = r ? matchIndex(r) : -1;
+    const found = idx >= 0;
     return {
       question: q,
       ok: !!r,
       found,
-      position: found ? r!.match_index + 1 : null,
+      position: found ? idx + 1 : null,
       picks: r?.picks ?? [],
       sources: answers[i].sources
         .filter((s, j, all) => all.findIndex((x) => x.title === s.title) === j)
@@ -113,23 +132,24 @@ export async function POST(request: Request) {
   const posScore = (p: number | null) => (p == null ? 0 : Math.max(20, 100 - (p - 1) * 12));
   const score = Math.round(valid.reduce((a, r) => a + posScore(r.position), 0) / valid.length);
 
-  // Share of voice: every business named across all questions, position weighted
-  const key = (n: string) => n.toLowerCase().replace(/\b(the|inc|llc|co|corp|company|ltd)\b\.?/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+  // Share of voice: every business named across all questions, position weighted, same brand at different addresses merged
   const tally = new Map<string, { name: string; mentions: number; best: number; points: number }>();
+  const matchKeys = new Set(valid.filter((r) => r.found).map((r) => key(r.picks[r.position! - 1].name)));
   valid.forEach((r) => {
+    const seen = new Set<string>();
     r.picks.forEach((p, i) => {
       const k = key(p.name);
-      if (!k) return;
-      const t = tally.get(k) ?? { name: p.name, mentions: 0, best: 99, points: 0 };
+      if (!k || seen.has(k)) return;
+      seen.add(k);
+      const clean = p.name.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s+\d.*$/, "").trim() || p.name;
+      const t = tally.get(k) ?? { name: clean, mentions: 0, best: 99, points: 0 };
       t.mentions++; t.best = Math.min(t.best, i + 1); t.points += posScore(i + 1);
       tally.set(k, t);
     });
   });
-  const youKey = key(business);
-  const matchKeys = new Set(valid.filter((r) => r.found).map((r) => key(r.picks[r.position! - 1].name)));
   const totalPoints = Array.from(tally.values()).reduce((a, t) => a + t.points, 0) || 1;
   const competitors = Array.from(tally.entries())
-    .map(([k, t]) => ({ name: t.name, mentions: t.mentions, best: t.best, share: Math.round((t.points / totalPoints) * 100), you: k === youKey || matchKeys.has(k) }))
+    .map(([k, t]) => ({ name: t.name, mentions: t.mentions, best: t.best, share: Math.round((t.points / totalPoints) * 100), you: k === bizKey || matchKeys.has(k) }))
     .sort((a, b) => b.share - a.share || a.best - b.best)
     .slice(0, 10);
 
