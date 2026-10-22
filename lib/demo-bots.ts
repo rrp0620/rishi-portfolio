@@ -22,6 +22,8 @@ export type DemoBot = {
   starters: string[];
   /** Who a hand-off goes to, in plain words. */
   handoff: string;
+  /** Exact line for anything the KB doesn't cover (replaces the default "not sure" reply). */
+  fallback?: string;
   kb: string;
 };
 
@@ -194,6 +196,46 @@ Prices: Daycare half day (up to 5 hours) or Saturday $25. Full day $35. 10 visit
 Policies: Daycare drop-off by 10am Mon-Fri. Boarding drop-off closes at 6pm weekdays, 2pm Saturday. No pickups or drop-offs noon-2pm weekdays. Reservations required. Packages prepaid, non-refundable, non-transferable, expire after 6 months; any package includes a free nail trim. Payment due at pickup: cash, Venmo, CashApp, Visa, MC, Discover; no checks from first-time clients. Bring your dog's own food pre-portioned in labeled zip bags (house food available for boarders). Bedding provided; you may bring 1 labeled toy, blanket or scent item.
 Requirements: dogs must be 10 weeks or older. Dogs over 12 months must be spayed or neutered. Vaccination records from a licensed vet (owner-given shots not accepted). Negative fecal test and current flea preventative required. Must be non-aggressive with no food or toy guarding. Registration form and a private interview come first. Arrive and leave on leash; no pinch, correction or flea collars, and dogs don't wear collars inside. Owners sign a health contract (no illness or exposure in last 30 days); vet note needed to return after any illness.
 How to start: fill out the registration form on the website, schedule the interview, then book with the Book Now form or by phone.
+`,
+  },
+  {
+    slug: "knockout-boxing",
+    name: "Knockout Boxing & Fitness",
+    town: "Newark, DE",
+    website: "https://demos.websageinc.com/knockout-boxing/",
+    phone: "(302) 200-8714",
+    accent: "#c8102e",
+    greeting:
+      "Hey, I'm the Knockout assistant. Ask me about classes, kids' boxing or pricing.",
+    starters: [
+      "How much is a drop-in class?",
+      "My son is 7, what class fits him?",
+      "Do you have kickboxing on weekends?",
+      "Are you open Sunday?",
+    ],
+    handoff: "the Knockout team",
+    fallback:
+      "Give us a call at (302) 200-8714, or book online at bookwhen.com/knockoutboxing.",
+    kb: `
+Knockout Boxing & Fitness, 1244 Capitol Trl, Newark, DE 19711 (mailing address 1248 Capitol Trl, Newark, DE 19711). Phone (302) 200-8714. No email address is published. Book classes online at bookwhen.com/knockoutboxing. Facebook: facebook.com/Knockout007. Instagram: @knockoutboxing. Se habla español: English and Spanish spoken (if the customer writes in Spanish, answer in Spanish).
+About: USA Boxing-certified facility, locally and family-owned, since 2017, 20+ years of experience. Open 7 days a week, flexible scheduling, family plans available. Gym cleaned and sanitized multiple times daily. Programs: cardio kickboxing, youth boxing, adult skilled boxing, private training, collegiate and sport conditioning.
+Coaches: Coach Jon (21 years of experience), Coach Brody (13 years), Coach Cameron (12 years).
+Hours: Mon-Fri 8:00 am-7:30 pm. Saturday 9:00 am-12:30 pm. Sunday 8:00 am-11:30 am.
+Cardio Kickboxing: 45-55 minute group classes, seven days a week, all skill levels, no boxing experience needed. Burns 500-1,000 calories (about 500-800 for women, 800-1,000 for men). Format: 10-minute warm-up, four-minute rounds on heavy bags, new combinations every 1-2 minutes, active rest, final circuit plus core work. Gloves and wraps included with enrollment. Drop-ins, monthly (no-contract) and package memberships, and discounted annual plans.
+Youth Skilled Boxing: ages 5 to 12, beginners and experienced kids. Boxing fundamentals, footwork, pad and bag work, optional ring time, offense, defense, self-defense skills. Classes four days a week. Month-to-month or annual plans. All equipment provided (gloves, wraps, mouthpiece).
+Adult Skilled Boxing (teen and adult classes): beginner to advanced, offensive and defensive tactics, intense conditioning, optional live sparring, competitive opportunities and a path to pro boxing. The gym hosts local shows twice a year, competes in regional tri-state competitions with an active amateur team, and supports pro aspirations. Month-to-month or annual memberships, no contract required. Gloves, wraps and mouthpiece provided. Fitness attire and shoes required.
+Private Training: one-on-one, 30- or 60-minute sessions, flexible scheduling, in person or online (structured four-week remote blocks). Goals: weight loss, muscle building, toning, conditioning, boxing skills. $199/month for 30-minute sessions, $260/month for 60-minute sessions. Trial sessions available. Private training clients also get the cardio and skilled boxing classes at no extra cost. Sign up through the Private Training Interest Form on the site or call.
+Weekly class schedule (times can change; the live schedule is on Bookwhen):
+- Monday: 9:00 am Cardio Boxing/Kickboxing; 9:00 am Teen and Adult Skilled Boxing; 10:00 am Private Home School Boxing and Conditioning; 4:30 pm Cardio; 5:30 pm Cardio (2 classes); 5:30 pm Kids Skilled Boxing (5-12); 6:30 pm Cardio; 6:30 pm Teen and Adult Skilled Boxing.
+- Tuesday: 10:30 am Cardio; 4:30 pm Cardio; 5:30 pm Cardio.
+- Wednesday: 9:00 am Cardio; 9:00 am Teen and Adult Skilled Boxing; 4:30 pm Cardio; 5:30 pm Cardio (2 classes); 5:30 pm Kids Skilled Boxing (5-12); 6:30 pm Cardio; 6:30 pm Teen and Adult Skilled Boxing.
+- Thursday: 10:30 am Cardio; 4:30 pm Cardio; 5:30 pm Cardio (2 classes); 6:30 pm Cardio; 6:30 pm Teen and Adult Skilled Boxing.
+- Friday: 9:00 am Cardio; 9:00 am Teen and Adult Skilled Boxing; 4:30 pm Cardio; 5:30 pm Cardio; 5:30 pm Kids Skilled Boxing (5-12).
+- Saturday: 9:00 am Cardio; 9:00 am Teen and Adult Skilled Boxing; 10:30 am Kids Skilled Boxing (5-12).
+- Sunday: 9:00 am Cardio; 9:30 am Teen and Adult Skilled Boxing.
+Prices: Drop-in single classes are $25.00 each for Cardio Boxing/Kickboxing, Kids Boxing and Teen/Adult Boxing, booked on Bookwhen (online bookings carry a 2.9% + $0.30 booking fee; no refunds once paid). A drop-in is the way to try a class before a membership. Monthly and annual membership prices are NOT listed on the site, and neither are family plan prices: say so and answer with "Give us a call at (302) 200-8714, or book online at bookwhen.com/knockoutboxing."
+Discounts (amounts not listed; for the amount answer with "Give us a call at (302) 200-8714, or book online at bookwhen.com/knockoutboxing."): all active and veteran U.S. military; local first responders (police, fire); local nurses and health care professionals; local teachers and college students.
+First class: wear fitness attire, bring a water bottle, arrive 15 minutes early to stretch, put on equipment and sign the waiver. For kids, all equipment is provided at the gym.
 `,
   },
 ];
