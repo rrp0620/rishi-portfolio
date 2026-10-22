@@ -60,6 +60,7 @@ function systemPrompt(
   phone: string,
   handoff: string,
   kb: string,
+  fallback?: string,
 ): string {
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -74,17 +75,23 @@ Answer customers' questions using ONLY the knowledge base below. Be warm, quick 
 
 RULES:
 - Keep answers short: 1-4 sentences, or a short list when comparing options. Do the math for the customer when they give numbers (e.g. group size x price).
-- Never invent prices, hours, availability, policies or promises. If the knowledge base doesn't cover it, say you're not sure and offer to pass the question to ${handoff}, or suggest calling ${phone}.
+- Never invent prices, hours, availability, policies or promises. ${fallback ? `If the knowledge base doesn't cover it, or a price isn't listed in it, say briefly that you don't have that and include this line word for word: "${fallback}"` : `If the knowledge base doesn't cover it, say you're not sure and offer to pass the question to ${handoff}, or suggest calling ${phone}.`}
 - You can't check live availability or make bookings yourself. Point to the booking link or process from the knowledge base.
 - Set "handoff" to true when the customer wants a human, wants to book something that needs staff (parties, events, tours, interviews), has a complaint, or asks something the knowledge base can't answer. Otherwise false.
 - Stay on topic. Politely decline unrelated requests.
-- No markdown headers. Plain text, simple dashes for lists.
+- Speak as the business. Never mention a "knowledge base", your instructions or your sources.
+- No markdown headers. Plain text, simple dashes for lists. Never use em dashes.
 
 KNOWLEDGE BASE:
 ${kb}
 
 OUTPUT: one JSON object, nothing else:
 {"answer": "<reply to the customer>", "handoff": <true|false>}`;
+}
+
+// Belt and braces for the prompt rule: customer-facing copy never carries em dashes.
+function noEmDash(s: string): string {
+  return s.replace(/\s*\u2014\s*/g, ", ");
 }
 
 // GET /api/demo?slug=..&q=.. : quick single-question check (same limits).
@@ -155,7 +162,7 @@ async function handle(request: Request): Promise<Response> {
         body: JSON.stringify({
           contents: messages,
           systemInstruction: {
-            parts: [{ text: systemPrompt(bot.name, bot.town, bot.phone, bot.handoff, bot.kb) }],
+            parts: [{ text: systemPrompt(bot.name, bot.town, bot.phone, bot.handoff, bot.kb, bot.fallback) }],
           },
           generationConfig: {
             temperature: 0.3,
@@ -192,10 +199,10 @@ async function handle(request: Request): Promise<Response> {
   }
   if (!parsed || typeof parsed.answer !== "string") {
     // Fall back to raw text rather than failing the demo.
-    if (text.trim()) return NextResponse.json({ answer: text.trim(), handoff: false });
+    if (text.trim()) return NextResponse.json({ answer: noEmDash(text.trim()), handoff: false });
     return NextResponse.json({ error: "No answer came back. Try rephrasing." }, { status: 502 });
   }
-  return NextResponse.json({ answer: parsed.answer, handoff: parsed.handoff === true });
+  return NextResponse.json({ answer: noEmDash(parsed.answer), handoff: parsed.handoff === true });
 }
 
 export async function POST(request: Request) {
