@@ -8,13 +8,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 // Pages live on websageinc.com/demo/* (websageinc-site repo); this route is
-// only the chat backend, so allow those origins (plus Netlify previews).
+// only the chat backend, so allow those origins (plus Netlify and Cloudflare Pages previews).
 function corsHeaders(request: Request): Record<string, string> {
   const origin = request.headers.get("origin") ?? "";
   let ok = false;
   try {
     const host = new URL(origin).hostname;
-    ok = host === "websageinc.com" || host === "websage-demos.vercel.app" || host.endsWith(".websageinc.com") || host.endsWith(".netlify.app") || host === "localhost";
+    ok = host === "websageinc.com" || host === "websage-demos.vercel.app" || host.endsWith(".websageinc.com") || host.endsWith(".netlify.app") || host === "websageinc.pages.dev" || host.endsWith(".websageinc.pages.dev") || host === "localhost";
   } catch {}
   return ok
     ? {

@@ -22,6 +22,8 @@ function originOk(origin: string): boolean {
       host.endsWith(".websageinc.com") ||
       host === "websageinc.netlify.app" ||
       host.endsWith("--websageinc.netlify.app") ||
+      host === "websageinc.pages.dev" ||
+      host.endsWith(".websageinc.pages.dev") ||
       host === "localhost" ||
       host === "127.0.0.1"
     );
