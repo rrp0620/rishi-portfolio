@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 import { getDemoBot } from "@/lib/demo-bots";
+import { generateContent } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,7 +40,6 @@ export function OPTIONS(request: Request) {
  * 200 -> { answer, handoff }
  */
 
-const MODEL = process.env.GEMINI_ASK_MODEL ?? "gemini-2.5-flash";
 const RATE_LIMIT_PER_HOUR = 40;
 const HITS: Map<string, number[]> = new Map();
 
@@ -155,24 +155,17 @@ async function handle(request: Request): Promise<Response> {
 
   let res: Response;
   try {
-    res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`,
-      {
-        method: "POST",
-        headers: { "x-goog-api-key": apiKey, "content-type": "application/json" },
-        body: JSON.stringify({
-          contents: messages,
-          systemInstruction: {
-            parts: [{ text: systemPrompt(bot.name, bot.town, bot.phone, bot.handoff, bot.kb, bot.fallback) }],
-          },
-          generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 1200,
-            responseMimeType: "application/json",
-          },
-        }),
+    res = await generateContent(apiKey, {
+      contents: messages,
+      systemInstruction: {
+        parts: [{ text: systemPrompt(bot.name, bot.town, bot.phone, bot.handoff, bot.kb, bot.fallback) }],
       },
-    );
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1200,
+        responseMimeType: "application/json",
+      },
+    });
   } catch {
     return NextResponse.json({ error: "Couldn't reach the assistant. Try again." }, { status: 502 });
   }
