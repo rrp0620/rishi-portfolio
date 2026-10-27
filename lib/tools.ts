@@ -5,9 +5,8 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
+import { generateContent } from "@/lib/gemini";
 import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
-
-export const MODEL = process.env.GEMINI_ASK_MODEL ?? "gemini-2.5-flash";
 
 export function apiKey(): string | null {
   return process.env.GOOGLE_API_KEY ?? process.env.GEMINI_API_KEY ?? null;
@@ -136,15 +135,7 @@ export async function gemini(opts: GeminiOpts): Promise<GeminiResult> {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), opts.timeoutMs ?? 40_000);
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`,
-      {
-        method: "POST",
-        headers: { "x-goog-api-key": key, "content-type": "application/json" },
-        body: JSON.stringify(body),
-        signal: ctl.signal,
-      },
-    );
+    const res = await generateContent(key, body, { search: opts.search, signal: ctl.signal });
     if (!res.ok) {
       logUpstream("tools gemini", res.status, await res.text().catch(() => ""));
       return { ok: false, status: res.status, text: "", sources: [] };
