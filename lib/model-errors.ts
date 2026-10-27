@@ -1,9 +1,9 @@
 /**
  * Shared handling for Gemini upstream errors in the public tools, demo bots, Ask Rishi and the audit demo.
- * 402 (prepayment credits depleted) means the AI credit is out; 429 (rate limit / quota) means busy.
+ * 402 (prepayment credits depleted) gets a soft "taking a break" line with our phone; 429 (rate limit / quota) means busy.
  * Each of those is logged once per instance until a call succeeds again; other errors log every time.
  */
-export const CREDIT_OUT = "AI credit is out, tell Rishi.";
+export const CREDIT_OUT = "This is taking a break right now. Call us at (302) 344-2033 and we'll help.";
 export const BUSY = "Busy right now, try again in a minute.";
 
 const logged = new Set<number>();
