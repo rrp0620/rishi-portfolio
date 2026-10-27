@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,10 +34,9 @@ const MODEL = process.env.GEMINI_AUDIT_MODEL ?? "gemini-2.5-flash";
 const TEMPERATURE = 0.4;
 const MAX_OUTPUT_TOKENS = 2000;
 const RATE_LIMIT_PER_HOUR = 5;
-// While the route is being debugged, append the upstream error body to
-// the user-facing error so failures are diagnosable from the toast.
-// Set GEMINI_AUDIT_DEBUG=0 in production to hide upstream details.
-const EXPOSE_UPSTREAM_ERRORS = process.env.GEMINI_AUDIT_DEBUG !== "0";
+// Off by default: visitors never see the raw upstream error. Set
+// GEMINI_AUDIT_DEBUG=1 to append it to the error toast while debugging.
+const EXPOSE_UPSTREAM_ERRORS = process.env.GEMINI_AUDIT_DEBUG === "1";
 
 const SYSTEM_PROMPT = `You are an AI use-case audit assistant. You write in the voice of Rishi Patel, an operator and AI builder who is interviewing for AI deployment roles. The person on the other end of this conversation is a recruiter or hiring manager trying the demo from his portfolio site. They have typed in a company name and a workflow description.
 
@@ -322,7 +322,7 @@ If google_search is available, run a quick search on the company first. Then ret
   }
 
   // Attempt 2: without google_search, strict JSON mode.
-  if (!response.ok && response.status !== 429) {
+  if (!response.ok && response.status !== 429 && response.status !== 402) {
     firstAttemptError = await response.text().catch(() => "<no body>");
     console.error(
       "audit attempt 1 (with google_search) failed; retrying without:",
@@ -342,32 +342,22 @@ If google_search is available, run a quick search on the company first. Then ret
 
   if (!response.ok) {
     const errText = await response.text().catch(() => "<no body>");
-    console.error(
-      "audit upstream error (final)",
-      response.status,
-      errText.slice(0, 1000),
-    );
+    logUpstream("audit", response.status, errText);
 
     const lower = errText.toLowerCase();
     const isQuota =
       lower.includes("quota") ||
       lower.includes("resource_exhausted") ||
-      lower.includes("rate limit") ||
-      response.status === 429;
+      lower.includes("rate limit");
     const isAuth =
       lower.includes("api key") ||
       lower.includes("permission_denied") ||
       response.status === 401 ||
       response.status === 403;
 
-    if (isQuota) {
-      return NextResponse.json(
-        {
-          error:
-            "The audit demo is briefly throttled. Give it a minute and try again.",
-        },
-        { status: 429 },
-      );
+    const limit = limitMessage(response.status) ?? (isQuota ? limitMessage(429) : null);
+    if (limit) {
+      return NextResponse.json({ error: limit.error }, { status: limit.status });
     }
     if (isAuth) {
       return NextResponse.json(
@@ -390,6 +380,7 @@ If google_search is available, run a quick search on the company first. Then ret
     );
   }
 
+  upstreamOk();
   const data = (await response.json()) as GeminiResponse;
   const finalText = getResponseText(data);
 

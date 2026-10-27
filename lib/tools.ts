@@ -5,6 +5,7 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
+import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 
 export const MODEL = process.env.GEMINI_ASK_MODEL ?? "gemini-2.5-flash";
 
@@ -145,9 +146,10 @@ export async function gemini(opts: GeminiOpts): Promise<GeminiResult> {
       },
     );
     if (!res.ok) {
-      console.error("tools gemini", res.status, (await res.text().catch(() => "")).slice(0, 400));
+      logUpstream("tools gemini", res.status, await res.text().catch(() => ""));
       return { ok: false, status: res.status, text: "", sources: [] };
     }
+    upstreamOk();
     const data = (await res.json()) as {
       candidates?: {
         content?: { parts?: { text?: string; thought?: boolean }[] };
@@ -187,7 +189,8 @@ export function extractJson<T = unknown>(text: string): T | null {
 
 export function upstreamError(request: Request, status: number): Response {
   if (status === 503) return json(request, { error: "This tool is down for a moment. Please try again soon." }, 503);
-  if (status === 429) return json(request, { error: "Lots of people are using this right now. Try again in a minute." }, 429);
+  const limit = limitMessage(status);
+  if (limit) return json(request, { error: limit.error }, limit.status);
   return json(request, { error: "Something went wrong on our side. Please try again." }, 502);
 }
 
