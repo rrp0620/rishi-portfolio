@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { COACH_KB, PRICING_VERSION } from "@/lib/coach-kb";
+import { upstreamFailure, upstreamOk } from "@/lib/model-errors";
 import { websageOriginAllowed } from "@/lib/websage-origins";
 
 export const runtime = "nodejs";
@@ -154,9 +155,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Couldn't reach the model." }, { status: 502, headers });
   }
   if (!res.ok) {
-    console.error("prep upstream", res.status, (await res.text().catch(() => "")).slice(0, 400));
-    return NextResponse.json({ error: "Model error, try again." }, { status: 502, headers });
+    const f = upstreamFailure("prep", res.status, await res.text().catch(() => ""));
+    return NextResponse.json({ error: f.error }, { status: f.status, headers });
   }
+  upstreamOk();
   const data = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
   const out = data.candidates?.[0]?.content?.parts?.map((x) => x.text ?? "").join("") ?? "";
   try {
