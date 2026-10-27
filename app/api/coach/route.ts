@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { websageOriginAllowed } from "@/lib/websage-origins";
 import { COACH_KB } from "@/lib/coach-kb";
+import { upstreamFailure, upstreamOk } from "@/lib/model-errors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -125,10 +126,10 @@ async function handle(request: Request): Promise<Response> {
     return NextResponse.json({ error: "Couldn't reach the model." }, { status: 502 });
   }
   if (!res.ok) {
-    const t = await res.text().catch(() => "");
-    console.error("coach upstream", res.status, t.slice(0, 400));
-    return NextResponse.json({ error: "Model error, try again." }, { status: 502 });
+    const f = upstreamFailure("coach", res.status, await res.text().catch(() => ""));
+    return NextResponse.json({ error: f.error }, { status: f.status });
   }
+  upstreamOk();
   const data = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
   const text = data.candidates?.[0]?.content?.parts?.find((p) => p.text?.trim())?.text ?? "";
   try {
@@ -168,10 +169,10 @@ async function streamLines(apiKey: string, user: string): Promise<Response> {
     return NextResponse.json({ error: "Couldn't reach the model." }, { status: 502 });
   }
   if (!up.ok || !up.body) {
-    const t = await up.text().catch(() => "");
-    console.error("coach stream upstream", up.status, t.slice(0, 400));
-    return NextResponse.json({ error: "Model error, try again." }, { status: 502 });
+    const f = upstreamFailure("coach stream", up.status, await up.text().catch(() => ""));
+    return NextResponse.json({ error: f.error }, { status: f.status });
   }
+  upstreamOk();
   const reader = up.body.getReader();
   const dec = new TextDecoder();
   const enc = new TextEncoder();
