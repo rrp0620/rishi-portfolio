@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 import { VOICE_RULES, BIO, FAQ, SOURCES } from "@/lib/knowledge";
 
 export const runtime = "nodejs";
@@ -272,22 +273,16 @@ export async function POST(request: Request) {
 
   if (!response.ok) {
     const errText = await response.text().catch(() => "<no body>");
-    console.error("ask upstream error", response.status, errText.slice(0, 1000));
+    logUpstream("ask", response.status, errText);
 
     const lower = errText.toLowerCase();
     const isQuota =
       lower.includes("quota") ||
       lower.includes("resource_exhausted") ||
-      lower.includes("rate limit") ||
-      response.status === 429;
-    if (isQuota) {
-      return NextResponse.json(
-        {
-          error:
-            "Ask Rishi is briefly throttled. Give it a minute and try again.",
-        },
-        { status: 429 },
-      );
+      lower.includes("rate limit");
+    const limit = limitMessage(response.status) ?? (isQuota ? limitMessage(429) : null);
+    if (limit) {
+      return NextResponse.json({ error: limit.error }, { status: limit.status });
     }
     return NextResponse.json(
       { error: "The model returned an error. Try again in a moment." },
@@ -295,6 +290,7 @@ export async function POST(request: Request) {
     );
   }
 
+  upstreamOk();
   const data = (await response.json()) as GeminiResponse;
   const text = getResponseText(data);
   if (!text) {

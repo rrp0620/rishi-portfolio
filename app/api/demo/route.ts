@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 import { getDemoBot } from "@/lib/demo-bots";
 
 export const runtime = "nodejs";
@@ -177,13 +178,14 @@ async function handle(request: Request): Promise<Response> {
   }
 
   if (!res.ok) {
-    const t = await res.text().catch(() => "");
-    console.error("demo upstream", res.status, t.slice(0, 500));
+    logUpstream("demo", res.status, await res.text().catch(() => ""));
+    const limit = limitMessage(res.status);
     return NextResponse.json(
-      { error: res.status === 429 ? "Busy for a moment, try again shortly." : "Something went wrong. Try again." },
-      { status: res.status === 429 ? 429 : 502 },
+      { error: limit?.error ?? "Something went wrong. Try again." },
+      { status: limit?.status ?? 502 },
     );
   }
+  upstreamOk();
 
   const data = (await res.json()) as {
     candidates?: { content?: { parts?: { text?: string }[] } }[];
