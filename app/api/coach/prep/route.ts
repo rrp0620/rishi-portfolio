@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { COACH_KB } from "@/lib/coach-kb";
+import { COACH_KB, PRICING_VERSION } from "@/lib/coach-kb";
 import { websageOriginAllowed } from "@/lib/websage-origins";
 
 export const runtime = "nodejs";
@@ -12,7 +12,7 @@ export const maxDuration = 60;
  * POST /api/coach/prep  (Authorization: Bearer <supabase access token>)
  *   { prospect: { business_name, contact_name, industry, town, offer, demo_url, website, notes, number_one_question,
  *                 money_line, facebook_url, instagram_url, google_profile_url, other_links, stage, source }, rep?: string }
- * 200 -> { offer, why_them, opener, hook, demo_steps[], number_one_question, money_math{line,assumptions},
+ * 200 -> { pricing, offer, why_them, opener, hook, demo_steps[], number_one_question, money_math{line,assumptions},
  *          their_questions[{q,a}], objections[{they,you}], close, voicemail, follow_up{subject,body}, send_after[], watch_outs[] }
  */
 
@@ -63,7 +63,7 @@ Hard rules:
 - Prices and terms only from the knowledge below. Discounts only as the knowledge allows (setup waived on a bundle, $500 one-time site); anything else is "${confirm}". Never invent promos or deadlines. The TERMS are locked in: say "no contract, cancel any time, no cancellation fee" plainly when price or commitment comes up, never hedge it.
 - Never claim clients, case studies or results. We have none yet besides our own businesses. Never imply other customers either ("many people choose", "most of our clients", "popular with").
 - Money math: use their own numbers if given, otherwise conservative low-end assumptions and say they're assumptions. Never promise results.
-- Pick the single best-fit offer for this business (not always the chatbot). If they have a demo site/bot, the call is built around showing it. A spec website prospect gets the website offer, led with the $500 one-time site, then Growth at $199/mo, then own-it options (see HOW TO PITCH A WEBSITE); a chatbot demo gets the assistant offer; add at most one natural add-on.
+- Pick the single best-fit offer for this business (not always the chatbot). If they have a demo site/bot, the call is built around showing it. A studio (beauty, tattoo, med spa) gets the STUDIO PITCH: Free Fix List, then the demo, then $500 setup + $397/mo with the founding offer of $299/mo locked plus the Launch Bonus Pack (word for word from the knowledge); pushback goes to Growth $249/mo, then the $500 one-time site; never below the floors ($299/mo Launch, $500 one-time site). Any other spec website prospect gets the website offer, led with the $500 one-time site, then Growth at $249/mo, then own-it options (see HOW TO PITCH A WEBSITE); a chatbot demo gets the assistant offer; add at most one natural add-on.
 - Their likely questions must include 2-3 "can it do X?" capability questions specific to their business, answered honestly from the CAN / CAN'T lists (e.g. "will it know my daily specials?").
 - Texting: never suggest texting someone who hasn't opted in. The follow-up is an email.
 
@@ -71,7 +71,7 @@ WEBSAGE KNOWLEDGE:
 ${COACH_KB}
 
 OUTPUT: one JSON object only, no markdown:
-{"offer":"the offer + price in one line, e.g. 'Website: $500 one time to get started (list $990). Growth $199/mo as the next step. Own it: $990 single page, $2,500 multi-page'",
+{"offer":"the offer + price in one line, e.g. 'Website: $500 one time to get started (list $990). Growth $249/mo as the next step. Own it: $990 single page, $2,500 multi-page'",
  "why_them":"1-2 sentences: why this business, why now (from the facts)",
  "opener":"first 2-3 sentences ${rep} says, using the contact's first name if known",
  "hook":"2-3 sentences explaining what we built for them and why it matters to them",
@@ -163,7 +163,8 @@ export async function POST(request: Request) {
     const o = JSON.parse(out.slice(out.indexOf("{"), out.lastIndexOf("}") + 1));
     // Belt and braces: no em dashes in anything Nicole reads out or sends.
     const clean = JSON.parse(JSON.stringify(o).replace(/—/g, ", "));
-    return NextResponse.json(clean, { headers });
+    // The Hub flags any prep without the current pricing tag.
+    return NextResponse.json({ ...clean, pricing: PRICING_VERSION }, { headers });
   } catch {
     return NextResponse.json({ error: "Unexpected prep shape." }, { status: 502, headers });
   }
