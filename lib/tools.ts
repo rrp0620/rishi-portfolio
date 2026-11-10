@@ -6,6 +6,7 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { generateContent } from "@/lib/gemini";
+import { groqChat, groqEnabled } from "@/lib/groq";
 import { limitMessage, logUpstream, upstreamOk } from "@/lib/model-errors";
 
 export function apiKey(): string | null {
@@ -119,7 +120,27 @@ export type GeminiResult = {
   sources: { title: string; uri: string }[];
 };
 
+/** Gemini first; if every Gemini model fails and GROQ_API_KEY is set, Groq answers instead. */
 export async function gemini(opts: GeminiOpts): Promise<GeminiResult> {
+  const t0 = Date.now();
+  const first = await geminiOnly(opts);
+  if (first.ok || !groqEnabled()) return first;
+  const left = (opts.timeoutMs ?? 40_000) - (Date.now() - t0);
+  if (left < 5_000) return first;
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), left);
+  try {
+    const r = await groqChat({ ...opts, signal: ctl.signal });
+    return r.ok ? r : first;
+  } catch (e) {
+    console.error("groq fetch", e);
+    return first;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function geminiOnly(opts: GeminiOpts): Promise<GeminiResult> {
   const key = apiKey();
   if (!key) return { ok: false, status: 503, text: "", sources: [] };
   const generationConfig: Record<string, unknown> = {
