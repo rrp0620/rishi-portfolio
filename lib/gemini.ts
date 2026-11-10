@@ -8,11 +8,13 @@
  *
  * Override the order with GEMINI_MODELS (comma separated) without a code change.
  */
+// Fast, working models first. gemini-3.8-flash (and the flash alias that points at it) was
+// hanging under load when this was written, so it is a fallback, not the first try.
 const DEFAULT_CHAIN = [
-  "gemini-3.8-flash",
-  "gemini-flash-latest",
   "gemini-3-flash-preview",
   "gemini-flash-lite-latest",
+  "gemini-3.8-flash",
+  "gemini-flash-latest",
 ];
 const CHAIN = (process.env.GEMINI_MODELS ?? "")
   .split(",")
@@ -22,7 +24,7 @@ const MODELS = CHAIN.length ? CHAIN : DEFAULT_CHAIN;
 // Statuses that mean "this model can't answer right now, try the next one", and how long it rests.
 const SKIP: Record<number, number> = { 429: 60_000, 500: 5_000, 503: 5_000, 404: 86_400_000, 403: 3_600_000 };
 const coolUntil = new Map<string, number>();
-const PER_MODEL_MS = 15_000;
+const PER_MODEL_MS = 12_000;
 
 // Gemini 3 models think before answering, and thinking counts against maxOutputTokens.
 // Keep it low so short tool answers aren't cut off mid-sentence.
