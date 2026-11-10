@@ -1,12 +1,19 @@
 /**
- * Gemini generateContent with a free-tier fallback chain. Each model has its own small
- * free quota, so on 429 we try the next model and only give up when all of them are out.
- * A model that just returned 429 is skipped for a minute so we don't burn time re-asking it.
+ * Gemini generateContent with a fallback chain. Each model has its own quota, and Google
+ * retires models over time, so a model that is out of quota (429), retired or not enabled
+ * (404/403) is skipped and the next one is tried. A skipped model rests before it is asked
+ * again: a minute after a 429, a day after it disappears.
+ *
+ * Override the order with GEMINI_MODELS (comma separated) without a code change.
  */
-const CHAIN = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-3-flash-preview"];
-// Google Search grounding is only free on the 2.5 models.
-const SEARCH_OK = new Set(["gemini-2.5-flash", "gemini-2.5-flash-lite"]);
-const COOLDOWN_MS = 60_000;
+const DEFAULT_CHAIN = ["gemini-3.8-flash", "gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-2.5-flash"];
+const CHAIN = (process.env.GEMINI_MODELS ?? "")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+const MODELS = CHAIN.length ? CHAIN : DEFAULT_CHAIN;
+// Statuses that mean "this model can't answer right now, try the next one", and how long it rests.
+const SKIP: Record<number, number> = { 429: 60_000, 404: 86_400_000, 403: 3_600_000 };
 const coolUntil = new Map<string, number>();
 
 export async function generateContent(
@@ -14,10 +21,9 @@ export async function generateContent(
   body: Record<string, unknown>,
   opts: { search?: boolean; signal?: AbortSignal } = {},
 ): Promise<Response> {
-  const models = CHAIN.filter((m) => !opts.search || SEARCH_OK.has(m));
-  const ready = models.filter((m) => (coolUntil.get(m) ?? 0) <= Date.now());
+  const ready = MODELS.filter((m) => (coolUntil.get(m) ?? 0) <= Date.now());
   let last: Response | null = null;
-  for (const model of ready.length ? ready : models) {
+  for (const model of ready.length ? ready : MODELS) {
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
       {
@@ -27,11 +33,15 @@ export async function generateContent(
         signal: opts.signal,
       },
     );
-    if (res.status !== 429) {
+    // Google Search grounding isn't on every model or tier: a 400 with search on means
+    // "not on this model", so move on instead of failing the whole request.
+    const rest = SKIP[res.status] ?? (opts.search && res.status === 400 ? 3_600_000 : 0);
+    if (!rest) {
       coolUntil.delete(model);
       return res;
     }
-    coolUntil.set(model, Date.now() + COOLDOWN_MS);
+    console.error("gemini skip", model, res.status);
+    coolUntil.set(model, Date.now() + rest);
     last = res;
   }
   return last!;
