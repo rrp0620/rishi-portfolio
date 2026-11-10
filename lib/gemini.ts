@@ -1,6 +1,6 @@
 /**
  * Gemini generateContent with a fallback chain. Each model has its own quota, and Google
- * retires models over time, so a model that is out of quota (429), retired or not enabled
+ * retires models over time, so a model that is out of quota (429), overloaded (500/503), retired or not enabled
  * (404/403) is skipped and the next one is tried. A skipped model rests before it is asked
  * again: a minute after a 429, a day after it disappears.
  *
@@ -13,7 +13,7 @@ const CHAIN = (process.env.GEMINI_MODELS ?? "")
   .filter(Boolean);
 const MODELS = CHAIN.length ? CHAIN : DEFAULT_CHAIN;
 // Statuses that mean "this model can't answer right now, try the next one", and how long it rests.
-const SKIP: Record<number, number> = { 429: 60_000, 404: 86_400_000, 403: 3_600_000 };
+const SKIP: Record<number, number> = { 429: 60_000, 500: 30_000, 503: 30_000, 404: 86_400_000, 403: 3_600_000 };
 const coolUntil = new Map<string, number>();
 
 export async function generateContent(
