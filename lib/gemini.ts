@@ -1,38 +1,87 @@
 /**
- * Gemini generateContent with a free-tier fallback chain. Each model has its own small
- * free quota, so on 429 we try the next model and only give up when all of them are out.
- * A model that just returned 429 is skipped for a minute so we don't burn time re-asking it.
+ * Gemini generateContent with a fallback chain. Each model has its own quota, and Google
+ * retires models over time, so a model that is out of quota (429), overloaded (500/503),
+ * retired or not enabled (404/403) is skipped and the next one is tried. A skipped model
+ * rests before it is asked again: a few seconds after an overload, a minute after a 429,
+ * a day after it disappears. The "-latest" aliases always point at Google's current models,
+ * so the chain keeps working when a named model is retired.
+ *
+ * Override the order with GEMINI_MODELS (comma separated) without a code change.
  */
-const CHAIN = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-3-flash-preview"];
-// Google Search grounding is only free on the 2.5 models.
-const SEARCH_OK = new Set(["gemini-2.5-flash", "gemini-2.5-flash-lite"]);
-const COOLDOWN_MS = 60_000;
+// Fast, working models first. gemini-3.8-flash (and the flash alias that points at it) was
+// hanging under load when this was written, so it is a fallback, not the first try.
+const DEFAULT_CHAIN = [
+  "gemini-3-flash-preview",
+  "gemini-flash-lite-latest",
+  "gemini-3.8-flash",
+  "gemini-flash-latest",
+];
+const CHAIN = (process.env.GEMINI_MODELS ?? "")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+const MODELS = CHAIN.length ? CHAIN : DEFAULT_CHAIN;
+// Statuses that mean "this model can't answer right now, try the next one", and how long it rests.
+const SKIP: Record<number, number> = { 429: 60_000, 500: 5_000, 503: 5_000, 404: 86_400_000, 403: 3_600_000 };
 const coolUntil = new Map<string, number>();
+const PER_MODEL_MS = 12_000;
+
+// Gemini 3 models think before answering, and thinking counts against maxOutputTokens.
+// Keep it low so short tool answers aren't cut off mid-sentence.
+function bodyFor(model: string, body: Record<string, unknown>): Record<string, unknown> {
+  if (!model.startsWith("gemini-3")) return body;
+  const gc = (body.generationConfig ?? {}) as Record<string, unknown>;
+  if (gc.thinkingConfig) return body;
+  return { ...body, generationConfig: { ...gc, thinkingConfig: { thinkingLevel: "low" } } };
+}
 
 export async function generateContent(
   key: string,
   body: Record<string, unknown>,
   opts: { search?: boolean; signal?: AbortSignal } = {},
 ): Promise<Response> {
-  const models = CHAIN.filter((m) => !opts.search || SEARCH_OK.has(m));
-  const ready = models.filter((m) => (coolUntil.get(m) ?? 0) <= Date.now());
+  const ready = MODELS.filter((m) => (coolUntil.get(m) ?? 0) <= Date.now());
   let last: Response | null = null;
-  for (const model of ready.length ? ready : models) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-      {
-        method: "POST",
-        headers: { "x-goog-api-key": key, "content-type": "application/json" },
-        body: JSON.stringify(body),
-        signal: opts.signal,
-      },
-    );
-    if (res.status !== 429) {
+  for (const model of ready.length ? ready : MODELS) {
+    if (opts.signal?.aborted) break;
+    // Each model gets a slice of time; a model that hangs (overloaded) is skipped like a 503.
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), PER_MODEL_MS);
+    const stop = () => ctl.abort();
+    opts.signal?.addEventListener("abort", stop, { once: true });
+    const t0 = Date.now();
+    let res: Response;
+    try {
+      res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+        {
+          method: "POST",
+          headers: { "x-goog-api-key": key, "content-type": "application/json" },
+          body: JSON.stringify(bodyFor(model, body)),
+          signal: ctl.signal,
+        },
+      );
+    } catch (e) {
+      if (opts.signal?.aborted) throw e;
+      console.error("gemini skip", model, "timeout", Date.now() - t0);
+      coolUntil.set(model, Date.now() + 30_000);
+      continue;
+    } finally {
+      clearTimeout(timer);
+      opts.signal?.removeEventListener("abort", stop);
+    }
+    // Google Search grounding isn't on every model or tier: a 400 with search on means
+    // "not on this model", so move on instead of failing the whole request.
+    const rest = SKIP[res.status] ?? (opts.search && res.status === 400 ? 3_600_000 : 0);
+    if (!rest) {
       coolUntil.delete(model);
+      console.log("gemini", model, res.status, Date.now() - t0);
       return res;
     }
-    coolUntil.set(model, Date.now() + COOLDOWN_MS);
+    console.error("gemini skip", model, res.status, Date.now() - t0);
+    coolUntil.set(model, Date.now() + rest);
     last = res;
   }
+  if (!last) return new Response(JSON.stringify({ error: { message: "all models timed out" } }), { status: 504 });
   return last!;
 }
