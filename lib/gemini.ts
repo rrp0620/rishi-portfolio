@@ -22,6 +22,7 @@ const MODELS = CHAIN.length ? CHAIN : DEFAULT_CHAIN;
 // Statuses that mean "this model can't answer right now, try the next one", and how long it rests.
 const SKIP: Record<number, number> = { 429: 60_000, 500: 5_000, 503: 5_000, 404: 86_400_000, 403: 3_600_000 };
 const coolUntil = new Map<string, number>();
+const PER_MODEL_MS = 15_000;
 
 // Gemini 3 models think before answering, and thinking counts against maxOutputTokens.
 // Keep it low so short tool answers aren't cut off mid-sentence.
@@ -40,25 +41,45 @@ export async function generateContent(
   const ready = MODELS.filter((m) => (coolUntil.get(m) ?? 0) <= Date.now());
   let last: Response | null = null;
   for (const model of ready.length ? ready : MODELS) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-      {
-        method: "POST",
-        headers: { "x-goog-api-key": key, "content-type": "application/json" },
-        body: JSON.stringify(bodyFor(model, body)),
-        signal: opts.signal,
-      },
-    );
+    if (opts.signal?.aborted) break;
+    // Each model gets a slice of time; a model that hangs (overloaded) is skipped like a 503.
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), PER_MODEL_MS);
+    const stop = () => ctl.abort();
+    opts.signal?.addEventListener("abort", stop, { once: true });
+    const t0 = Date.now();
+    let res: Response;
+    try {
+      res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+        {
+          method: "POST",
+          headers: { "x-goog-api-key": key, "content-type": "application/json" },
+          body: JSON.stringify(bodyFor(model, body)),
+          signal: ctl.signal,
+        },
+      );
+    } catch (e) {
+      if (opts.signal?.aborted) throw e;
+      console.error("gemini skip", model, "timeout", Date.now() - t0);
+      coolUntil.set(model, Date.now() + 30_000);
+      continue;
+    } finally {
+      clearTimeout(timer);
+      opts.signal?.removeEventListener("abort", stop);
+    }
     // Google Search grounding isn't on every model or tier: a 400 with search on means
     // "not on this model", so move on instead of failing the whole request.
     const rest = SKIP[res.status] ?? (opts.search && res.status === 400 ? 3_600_000 : 0);
     if (!rest) {
       coolUntil.delete(model);
+      console.log("gemini", model, res.status, Date.now() - t0);
       return res;
     }
-    console.error("gemini skip", model, res.status);
+    console.error("gemini skip", model, res.status, Date.now() - t0);
     coolUntil.set(model, Date.now() + rest);
     last = res;
   }
+  if (!last) return new Response(JSON.stringify({ error: { message: "all models timed out" } }), { status: 504 });
   return last!;
 }
